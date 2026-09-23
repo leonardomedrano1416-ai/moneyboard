@@ -8,20 +8,30 @@
 
 <style>
 *{box-sizing:border-box}
+
 body{
   margin:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:#f3f4f6;
   color:#111827;
 }
+
 .app{
   max-width:520px;
   margin:auto;
   min-height:100vh;
   padding:24px 18px 110px;
 }
-h1{margin:0;font-size:32px}
-.subtitle{color:#6b7280;margin:4px 0 22px}
+
+h1{
+  margin:0;
+  font-size:32px;
+}
+
+.subtitle{
+  color:#6b7280;
+  margin:4px 0 22px;
+}
 
 .card{
   background:white;
@@ -30,17 +40,20 @@ h1{margin:0;font-size:32px}
   margin-bottom:16px;
   box-shadow:0 5px 20px rgba(0,0,0,.06);
 }
+
 .label{
   font-size:12px;
   font-weight:700;
   color:#6b7280;
   letter-spacing:1px;
 }
+
 .big{
   font-size:40px;
   font-weight:800;
   margin-top:6px;
 }
+
 .green{color:#16803c}
 .red{color:#b91c1c}
 .orange{color:#b45309}
@@ -51,32 +64,52 @@ h1{margin:0;font-size:32px}
   gap:12px;
   margin-top:16px;
 }
+
 .stat{
   background:#f8fafc;
   border-radius:16px;
   padding:14px;
 }
-.stat-name{font-size:12px;color:#6b7280}
-.stat-value{font-size:19px;font-weight:750;margin-top:4px}
+
+.stat-name{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.stat-value{
+  font-size:19px;
+  font-weight:750;
+  margin-top:4px;
+}
+
+/* NAVIGATION */
 
 .tabs{
-  display:flex;
-  gap:8px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
   margin-bottom:16px;
 }
+
 .tab{
-  flex:1;
   border:0;
-  padding:11px 5px;
+  padding:11px 3px;
   border-radius:12px;
   background:#e5e7eb;
   font-weight:700;
+  font-size:12px;
   cursor:pointer;
 }
-.tab.active{background:#111827;color:white}
+
+.tab.active{
+  background:#111827;
+  color:white;
+}
 
 .page{display:none}
 .page.active{display:block}
+
+/* BUTTONS */
 
 .primary{
   width:100%;
@@ -89,6 +122,7 @@ h1{margin:0;font-size:32px}
   font-size:16px;
   cursor:pointer;
 }
+
 .secondary{
   width:100%;
   border:1px solid #d1d5db;
@@ -100,40 +134,47 @@ h1{margin:0;font-size:32px}
   margin-top:10px;
 }
 
-.bill{
+.small-button{
+  border:0;
+  border-radius:10px;
+  padding:8px 11px;
+  background:#111827;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* GENERAL ROWS */
+
+.item{
   padding:14px 0;
   border-bottom:1px solid #eee;
 }
-.bill:last-child{border-bottom:0}
-.bill-top{
+
+.item:last-child{
+  border-bottom:0;
+}
+
+.item-top{
   display:flex;
   justify-content:space-between;
   gap:10px;
   font-weight:750;
 }
-.bill-info{
+
+.item-info{
   color:#6b7280;
   font-size:14px;
   margin-top:4px;
 }
-.badge{
-  display:inline-block;
-  padding:4px 8px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:800;
-  margin-top:7px;
-}
-.badge.normal{background:#e5e7eb;color:#374151}
-.badge.soon{background:#fef3c7;color:#92400e}
-.badge.overdue{background:#fee2e2;color:#991b1b}
-.badge.paid{background:#dcfce7;color:#166534}
 
 .actions{
   display:flex;
+  flex-wrap:wrap;
   gap:14px;
   margin-top:10px;
 }
+
 .action{
   border:0;
   background:none;
@@ -142,11 +183,56 @@ h1{margin:0;font-size:32px}
   font-weight:700;
   font-size:13px;
 }
+
 .pay-action{color:#16803c}
 .edit-action{color:#2563eb}
 .delete-action{color:#b91c1c}
 
-input,select{
+/* BADGES */
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  margin-top:7px;
+}
+
+.badge.normal{
+  background:#e5e7eb;
+  color:#374151;
+}
+
+.badge.soon{
+  background:#fef3c7;
+  color:#92400e;
+}
+
+.badge.overdue{
+  background:#fee2e2;
+  color:#991b1b;
+}
+
+.badge.paid{
+  background:#dcfce7;
+  color:#166534;
+}
+
+.category-badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#f3f4f6;
+  font-size:12px;
+  font-weight:700;
+  margin-top:7px;
+}
+
+/* FORMS */
+
+input,
+select{
   width:100%;
   padding:13px;
   margin:6px 0 14px;
@@ -155,20 +241,25 @@ input,select{
   font-size:16px;
   background:white;
 }
+
 .form-label{
   font-size:14px;
   font-weight:700;
 }
+
 .check-row{
   display:flex;
   align-items:center;
   gap:10px;
   margin:5px 0 16px;
 }
+
 .check-row input{
   width:auto;
   margin:0;
 }
+
+/* MODALS */
 
 .modal{
   position:fixed;
@@ -180,7 +271,11 @@ input,select{
   padding:18px;
   z-index:20;
 }
-.modal.show{display:flex}
+
+.modal.show{
+  display:flex;
+}
+
 .modal-box{
   background:white;
   width:100%;
@@ -190,42 +285,56 @@ input,select{
   border-radius:22px;
   padding:22px;
 }
-.modal-box h2{margin-top:0}
+
+.modal-box h2{
+  margin-top:0;
+}
+
 .modal-actions{
   display:flex;
   gap:10px;
 }
-.modal-actions button{flex:1}
+
+.modal-actions button{
+  flex:1;
+}
+
+/* HOME */
 
 .empty{
   text-align:center;
   color:#6b7280;
   padding:18px;
 }
+
 .note{
   font-size:12px;
   color:#6b7280;
   line-height:1.45;
   margin-top:10px;
 }
+
 .safe-box{
   background:#ecfdf5;
   border-radius:18px;
   padding:18px;
   margin-top:18px;
 }
+
 .safe-label{
   font-size:12px;
   font-weight:800;
   color:#166534;
   letter-spacing:1px;
 }
+
 .safe-number{
   font-size:38px;
   font-weight:850;
   color:#166534;
   margin-top:3px;
 }
+
 .breakdown{
   display:flex;
   justify-content:space-between;
@@ -233,8 +342,142 @@ input,select{
   padding:11px 0;
   border-bottom:1px solid #eee;
 }
-.breakdown:last-child{border-bottom:0}
-.breakdown span:last-child{font-weight:750}
+
+.breakdown:last-child{
+  border-bottom:0;
+}
+
+.breakdown span:last-child{
+  font-weight:750;
+}
+
+/* SPENDING */
+
+.period-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+  margin-bottom:15px;
+}
+
+.period-title{
+  font-size:18px;
+  font-weight:800;
+  margin-top:4px;
+}
+
+.period-dates{
+  color:#6b7280;
+  font-size:13px;
+  margin-top:3px;
+}
+
+.category-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid #eee;
+}
+
+.category-row:last-child{
+  border-bottom:0;
+}
+
+.category-name{
+  font-weight:650;
+}
+
+.category-amount{
+  font-weight:800;
+}
+
+.total-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding-top:15px;
+  margin-top:5px;
+  border-top:2px solid #111827;
+  font-weight:850;
+  font-size:18px;
+}
+
+.special-box{
+  background:#f8fafc;
+  border-radius:16px;
+  padding:14px;
+  margin-top:15px;
+}
+
+.special-row{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+}
+
+.history-card{
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.history-title{
+  font-weight:800;
+}
+
+.history-subtitle{
+  color:#6b7280;
+  font-size:13px;
+  margin-top:2px;
+  margin-bottom:10px;
+}
+
+.quick-total{
+  font-size:28px;
+  font-weight:850;
+  margin-top:5px;
+}
+
+.transaction-amount{
+  font-weight:850;
+}
+
+.negative{
+  color:#b91c1c;
+}
+
+/* CATEGORY MANAGEMENT */
+
+.category-manager-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.category-manager-row:last-child{
+  border-bottom:0;
+}
+
+.custom-category-form{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  margin-top:12px;
+}
+
+.custom-category-form input{
+  margin:0;
+}
+
+.custom-category-form button{
+  flex-shrink:0;
+}
 </style>
 </head>
 
@@ -243,22 +486,27 @@ input,select{
 <div class="app">
 
 <h1>MoneyBoard</h1>
-<div class="subtitle">Know what you can safely spend.</div>
+<div class="subtitle">Know where your money is going.</div>
 
 <div class="tabs">
   <button class="tab active" onclick="showPage('home',this)">Home</button>
+  <button class="tab" onclick="showPage('transactions',this)">Transactions</button>
   <button class="tab" onclick="showPage('bills',this)">Bills</button>
   <button class="tab" onclick="showPage('money',this)">Money</button>
 </div>
 
+
 <!-- HOME -->
+
 <div id="home" class="page active">
 
   <div class="card">
+
     <div class="label">MONEY AVAILABLE NOW</div>
     <div class="big" id="currentBalance">$0.00</div>
 
     <div class="stats">
+
       <div class="stat">
         <div class="stat-name">Next paycheck</div>
         <div class="stat-value" id="paycheckAmount">$0.00</div>
@@ -268,23 +516,38 @@ input,select{
         <div class="stat-name">Payday</div>
         <div class="stat-value" id="paydayText">Not set</div>
       </div>
+
     </div>
 
     <div class="safe-box">
+
       <div class="safe-label">SAFE TO SPEND</div>
-      <div class="safe-number" id="safeSpend">$0.00</div>
+
+      <div class="safe-number" id="safeSpend">
+        $0.00
+      </div>
+
       <div class="note" id="safeExplanation">
         Based on your available money and planned expenses.
       </div>
+
     </div>
+
   </div>
 
+
   <div class="card">
+
     <div class="label">BEFORE NEXT PAYCHECK</div>
 
     <div class="breakdown">
       <span>Bills due</span>
       <span id="billsBeforePay">$0.00</span>
+    </div>
+
+    <div class="breakdown">
+      <span>Everyday spending</span>
+      <span id="spendingBeforePay">$0.00</span>
     </div>
 
     <div class="breakdown">
@@ -296,7 +559,44 @@ input,select{
       <span>Savings set aside</span>
       <span id="savingsAmount">$0.00</span>
     </div>
+
   </div>
+
+
+  <div class="card">
+
+    <div class="period-header">
+
+      <div>
+        <div class="label">SPENDING THIS PAY PERIOD</div>
+        <div class="period-dates" id="homePeriodDates"></div>
+      </div>
+
+      <div style="text-align:right">
+        <div class="label">TOTAL</div>
+        <div class="quick-total" id="homePeriodTotal">$0.00</div>
+      </div>
+
+    </div>
+
+    <div id="homeCategoryTotals"></div>
+
+    <div class="special-box">
+
+      <div class="special-row">
+        <span>💳 Debt payments recorded</span>
+        <strong id="homeDebtTransactions">$0.00</strong>
+      </div>
+
+      <div class="special-row">
+        <span>💰 Savings recorded</span>
+        <strong id="homeSavingsTransactions">$0.00</strong>
+      </div>
+
+    </div>
+
+  </div>
+
 
   <div class="card">
     <div class="label">COMING UP</div>
@@ -306,54 +606,187 @@ input,select{
 </div>
 
 
+<!-- TRANSACTIONS -->
+
+<div id="transactions" class="page">
+
+  <div class="card">
+
+    <button class="primary" onclick="openTransactionModal()">
+      + ADD TRANSACTION
+    </button>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="period-header">
+
+      <div>
+        <div class="label">CURRENT PAY PERIOD</div>
+        <div class="period-title" id="transactionPeriodTitle">
+          Spending
+        </div>
+        <div class="period-dates" id="transactionPeriodDates"></div>
+      </div>
+
+      <div style="text-align:right">
+        <div class="label">SPENT</div>
+        <div class="quick-total" id="transactionPeriodTotal">$0.00</div>
+      </div>
+
+    </div>
+
+    <div id="transactionCategoryTotals"></div>
+
+    <div class="special-box">
+
+      <div class="special-row">
+        <span>💳 Debt payments</span>
+        <strong id="periodDebtTransactions">$0.00</strong>
+      </div>
+
+      <div class="special-row">
+        <span>💰 Savings</span>
+        <strong id="periodSavingsTransactions">$0.00</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="label">TRANSACTIONS THIS PAY PERIOD</div>
+
+    <div id="transactionList"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="label">PREVIOUS PAY PERIODS</div>
+
+    <div id="periodHistory"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div class="label">YOUR CATEGORIES</div>
+
+    <div id="categoryManager"></div>
+
+    <div class="custom-category-form">
+
+      <input
+        type="text"
+        id="newCategoryName"
+        placeholder="New category">
+
+      <button
+        class="small-button"
+        onclick="addCustomCategory()">
+        Add
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <!-- BILLS -->
+
 <div id="bills" class="page">
 
   <div class="card">
+
     <button class="primary" onclick="openBillModal()">
       + ADD BILL
     </button>
+
   </div>
 
   <div class="card">
+
     <div class="label">YOUR BILLS</div>
+
     <div id="billList"></div>
+
   </div>
 
 </div>
 
 
 <!-- MONEY -->
+
 <div id="money" class="page">
 
   <div class="card">
 
     <div class="label">MONEY SETTINGS</div>
 
-    <div class="form-label">Current Available Balance</div>
-    <input type="number" step="0.01" id="moneyBalance">
+    <div class="form-label">
+      Current Available Balance
+    </div>
 
-    <div class="form-label">Expected Next Paycheck</div>
-    <input type="number" step="0.01" id="moneyPaycheck">
+    <input
+      type="number"
+      step="0.01"
+      id="moneyBalance">
 
-    <div class="form-label">Next Payday</div>
-    <input type="date" id="moneyPayday">
+    <div class="form-label">
+      Expected Next Paycheck
+    </div>
 
-    <div class="form-label">Set Aside for Savings</div>
-    <input type="number" step="0.01" id="moneySavings">
+    <input
+      type="number"
+      step="0.01"
+      id="moneyPaycheck">
 
-    <div class="form-label">Set Aside for Debt</div>
-    <input type="number" step="0.01" id="moneyDebt">
+    <div class="form-label">
+      Next Payday
+    </div>
 
-    <button class="primary" onclick="saveMoneySettings()">
+    <input
+      type="date"
+      id="moneyPayday">
+
+    <div class="form-label">
+      Set Aside for Savings
+    </div>
+
+    <input
+      type="number"
+      step="0.01"
+      id="moneySavings">
+
+    <div class="form-label">
+      Set Aside for Debt
+    </div>
+
+    <input
+      type="number"
+      step="0.01"
+      id="moneyDebt">
+
+    <button
+      class="primary"
+      onclick="saveMoneySettings()">
       SAVE
     </button>
 
     <div class="note">
-      “Safe to Spend” subtracts unpaid bills due before your next paycheck,
-      savings, and planned debt payments from your current available balance.
-      Your expected paycheck is shown separately and is not counted until you
-      actually receive it.
+      Your available balance is the starting amount MoneyBoard uses.
+      Everyday transactions are subtracted from Safe to Spend automatically.
+      Savings and debt transactions are tracked separately because you already
+      have dedicated savings and debt set-asides above.
     </div>
 
   </div>
@@ -363,30 +796,118 @@ input,select{
 </div>
 
 
+<!-- TRANSACTION MODAL -->
+
+<div class="modal" id="transactionModal">
+
+<div class="modal-box">
+
+<h2 id="transactionModalTitle">
+  Add Transaction
+</h2>
+
+<div class="form-label">Amount</div>
+
+<input
+  type="number"
+  step="0.01"
+  id="transactionAmount"
+  placeholder="0.00">
+
+<div class="form-label">Category</div>
+
+<select id="transactionCategory"></select>
+
+<div class="form-label">Description</div>
+
+<input
+  type="text"
+  id="transactionDescription"
+  placeholder="Example: QuikTrip, Walmart, McDonald's">
+
+<div class="form-label">Date</div>
+
+<input
+  type="date"
+  id="transactionDate">
+
+<div class="modal-actions">
+
+  <button
+    class="secondary"
+    onclick="closeTransactionModal()">
+    Cancel
+  </button>
+
+  <button
+    class="primary"
+    onclick="saveTransaction()">
+    Save
+  </button>
+
+</div>
+
+</div>
+</div>
+
+
 <!-- BILL MODAL -->
 
 <div class="modal" id="billModal">
+
 <div class="modal-box">
 
-<h2 id="billModalTitle">Add Bill</h2>
+<h2 id="billModalTitle">
+  Add Bill
+</h2>
 
 <div class="form-label">Bill Name</div>
-<input type="text" id="billName" placeholder="Example: Phone">
+
+<input
+  type="text"
+  id="billName"
+  placeholder="Example: Phone">
 
 <div class="form-label">Amount</div>
-<input type="number" step="0.01" id="billAmount" placeholder="0.00">
+
+<input
+  type="number"
+  step="0.01"
+  id="billAmount"
+  placeholder="0.00">
 
 <div class="form-label">Due Date</div>
-<input type="date" id="billDate">
+
+<input
+  type="date"
+  id="billDate">
 
 <div class="check-row">
-  <input type="checkbox" id="billRecurring">
-  <label for="billRecurring">Repeat monthly</label>
+
+  <input
+    type="checkbox"
+    id="billRecurring">
+
+  <label for="billRecurring">
+    Repeat monthly
+  </label>
+
 </div>
 
 <div class="modal-actions">
-  <button class="secondary" onclick="closeBillModal()">Cancel</button>
-  <button class="primary" onclick="saveBill()">Save</button>
+
+  <button
+    class="secondary"
+    onclick="closeBillModal()">
+    Cancel
+  </button>
+
+  <button
+    class="primary"
+    onclick="saveBill()">
+    Save
+  </button>
+
 </div>
 
 </div>
@@ -394,6 +915,10 @@ input,select{
 
 
 <script>
+
+/* =========================================================
+   MONEYBOARD SETTINGS
+========================================================= */
 
 const DEFAULT_MONEY = {
   balance:0,
@@ -403,27 +928,101 @@ const DEFAULT_MONEY = {
   debt:0
 };
 
+
+/*
+PayClock / MoneyBoard pay-period anchor:
+
+Monday September 21, 2026
+through Sunday October 4, 2026.
+
+Every pay period is 14 days.
+*/
+
+const PAY_PERIOD_ANCHOR =
+  new Date(2026,8,21,0,0,0,0);
+
+const PAY_PERIOD_DAYS = 14;
+
+
+/*
+Default transaction categories.
+Debt Payment and Savings are special categories.
+They are tracked, but not included in normal spending totals.
+*/
+
+const DEFAULT_CATEGORIES = [
+  "Groceries",
+  "Restaurants",
+  "Gas",
+  "Transportation",
+  "Bills",
+  "Shopping",
+  "School",
+  "Entertainment",
+  "Home",
+  "Health",
+  "Gifts",
+  "Debt Payment",
+  "Savings",
+  "Other"
+];
+
+const CATEGORY_ICONS = {
+  "Groceries":"🛒",
+  "Restaurants":"🍔",
+  "Gas":"⛽",
+  "Transportation":"🚗",
+  "Bills":"🧾",
+  "Shopping":"🛍️",
+  "School":"🎓",
+  "Entertainment":"🎬",
+  "Home":"🏠",
+  "Health":"❤️",
+  "Gifts":"💝",
+  "Debt Payment":"💳",
+  "Savings":"💰",
+  "Other":"📦"
+};
+
+
+/* =========================================================
+   LOAD SAVED DATA
+========================================================= */
+
 let money =
-  JSON.parse(localStorage.getItem("moneyboard_money"))
-  || {...DEFAULT_MONEY};
+  JSON.parse(
+    localStorage.getItem("moneyboard_money")
+  ) || {...DEFAULT_MONEY};
+
 
 let bills =
-  JSON.parse(localStorage.getItem("moneyboard_bills"))
-  || [];
+  JSON.parse(
+    localStorage.getItem("moneyboard_bills")
+  ) || [];
+
+
+let transactions =
+  JSON.parse(
+    localStorage.getItem("moneyboard_transactions")
+  ) || [];
+
+
+let customCategories =
+  JSON.parse(
+    localStorage.getItem("moneyboard_custom_categories")
+  ) || [];
+
 
 let editingBillId = null;
+let editingTransactionId = null;
 
 
-/* ---------- STORAGE ---------- */
-
-function saveBills(){
-  localStorage.setItem(
-    "moneyboard_bills",
-    JSON.stringify(bills)
-  );
-}
+/* =========================================================
+   STORAGE
+========================================================= */
 
 function saveMoney(){
+
   localStorage.setItem(
     "moneyboard_money",
     JSON.stringify(money)
@@ -431,27 +1030,67 @@ function saveMoney(){
 }
 
 
-/* ---------- HELPERS ---------- */
+function saveBills(){
 
-function moneyFormat(value){
-  return new Intl.NumberFormat("en-US",{
-    style:"currency",
-    currency:"USD"
-  }).format(Number(value) || 0);
+  localStorage.setItem(
+    "moneyboard_bills",
+    JSON.stringify(bills)
+  );
 }
 
+
+function saveTransactions(){
+
+  localStorage.setItem(
+    "moneyboard_transactions",
+    JSON.stringify(transactions)
+  );
+}
+
+
+function saveCustomCategories(){
+
+  localStorage.setItem(
+    "moneyboard_custom_categories",
+    JSON.stringify(customCategories)
+  );
+}
+
+
+/* =========================================================
+   BASIC HELPERS
+========================================================= */
+
+function moneyFormat(value){
+
+  return new Intl.NumberFormat(
+    "en-US",
+    {
+      style:"currency",
+      currency:"USD"
+    }
+  ).format(Number(value) || 0);
+}
+
+
 function localDate(date){
+
   return (
-    date.getFullYear() + "-" +
-    String(date.getMonth()+1).padStart(2,"0") + "-" +
+    date.getFullYear() +
+    "-" +
+    String(date.getMonth()+1).padStart(2,"0") +
+    "-" +
     String(date.getDate()).padStart(2,"0")
   );
 }
 
+
 function parseLocalDate(value){
+
   if(!value) return null;
 
-  const parts=value.split("-").map(Number);
+  const parts =
+    value.split("-").map(Number);
 
   return new Date(
     parts[0],
@@ -461,171 +1100,1487 @@ function parseLocalDate(value){
   );
 }
 
+
 function formatDate(value){
-  const date=parseLocalDate(value);
+
+  const date =
+    typeof value === "string"
+    ? parseLocalDate(value)
+    : value;
 
   if(!date) return "Not set";
 
-  return date.toLocaleDateString("en-US",{
-    month:"short",
-    day:"numeric"
-  });
-}
-
-function todayStart(){
-  const d=new Date();
-  d.setHours(0,0,0,0);
-  return d;
-}
-
-function daysUntil(dateString){
-  const date=parseLocalDate(dateString);
-  if(!date) return 99999;
-
-  return Math.round(
-    (date-todayStart())/86400000
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      month:"short",
+      day:"numeric"
+    }
   );
 }
 
 
-/* ---------- NAV ---------- */
+function formatLongDate(value){
 
-function showPage(page,button){
+  const date =
+    typeof value === "string"
+    ? parseLocalDate(value)
+    : value;
 
-  document.querySelectorAll(".page")
-    .forEach(p=>p.classList.remove("active"));
+  if(!date) return "";
 
-  document.getElementById(page)
-    .classList.add("active");
+  return date.toLocaleDateString(
+    "en-US",
+    {
+      month:"short",
+      day:"numeric",
+      year:"numeric"
+    }
+  );
+}
 
-  document.querySelectorAll(".tab")
-    .forEach(t=>t.classList.remove("active"));
 
-  button.classList.add("active");
+function todayStart(){
 
-  if(page==="money"){
-    loadMoneyForm();
+  const d = new Date();
+
+  d.setHours(0,0,0,0);
+
+  return d;
+}
+
+
+function daysUntil(dateString){
+
+  const date =
+    parseLocalDate(dateString);
+
+  if(!date) return 99999;
+
+  return Math.round(
+    (date - todayStart()) /
+    86400000
+  );
+}
+
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+/* =========================================================
+   CATEGORIES
+========================================================= */
+
+function getAllCategories(){
+
+  const combined = [
+    ...DEFAULT_CATEGORIES,
+    ...customCategories
+  ];
+
+  return [
+    ...new Set(combined)
+  ];
+}
+
+
+function categoryIcon(category){
+
+  return CATEGORY_ICONS[category] || "🏷️";
+}
+
+
+function isSpecialCategory(category){
+
+  return (
+    category === "Debt Payment" ||
+    category === "Savings"
+  );
+}
+
+
+function addCustomCategory(){
+
+  const input =
+    document.getElementById("newCategoryName");
+
+  const name =
+    input.value.trim();
+
+  if(!name){
+    alert("Enter a category name.");
+    return;
+  }
+
+  const exists =
+    getAllCategories()
+      .some(
+        category =>
+          category.toLowerCase() ===
+          name.toLowerCase()
+      );
+
+  if(exists){
+
+    alert("That category already exists.");
+
+    return;
+  }
+
+  customCategories.push(name);
+
+  saveCustomCategories();
+
+  input.value = "";
+
+  populateCategorySelect();
+
+  renderCategoryManager();
+
+  render();
+}
+
+
+function deleteCustomCategory(name){
+
+  const used =
+    transactions.some(
+      transaction =>
+        transaction.category === name
+    );
+
+  if(used){
+
+    alert(
+      "This category is being used by a transaction. Edit those transactions before deleting the category."
+    );
+
+    return;
+  }
+
+  if(
+    !confirm(
+      `Delete the category "${name}"?`
+    )
+  ){
+    return;
+  }
+
+  customCategories =
+    customCategories.filter(
+      category =>
+        category !== name
+    );
+
+  saveCustomCategories();
+
+  populateCategorySelect();
+
+  renderCategoryManager();
+}
+
+
+function populateCategorySelect(){
+
+  const select =
+    document.getElementById(
+      "transactionCategory"
+    );
+
+  if(!select) return;
+
+  const currentValue =
+    select.value;
+
+  select.innerHTML =
+    getAllCategories()
+      .map(
+        category =>
+          `<option value="${escapeHTML(category)}">
+            ${categoryIcon(category)} ${escapeHTML(category)}
+          </option>`
+      )
+      .join("");
+
+  if(
+    getAllCategories()
+      .includes(currentValue)
+  ){
+    select.value =
+      currentValue;
   }
 }
 
 
-/* ---------- BILL STATUS ---------- */
+function renderCategoryManager(){
+
+  const container =
+    document.getElementById(
+      "categoryManager"
+    );
+
+  if(!container) return;
+
+  const defaults =
+    DEFAULT_CATEGORIES
+      .map(
+        category => `
+          <div class="category-manager-row">
+
+            <span>
+              ${categoryIcon(category)}
+              ${escapeHTML(category)}
+            </span>
+
+            <span class="note" style="margin:0">
+              Default
+            </span>
+
+          </div>
+        `
+      )
+      .join("");
+
+
+  const customs =
+    customCategories
+      .map(
+        category => `
+          <div class="category-manager-row">
+
+            <span>
+              🏷️ ${escapeHTML(category)}
+            </span>
+
+            <button
+              class="action delete-action"
+              onclick='deleteCustomCategory(${JSON.stringify(category)})'>
+              Delete
+            </button>
+
+          </div>
+        `
+      )
+      .join("");
+
+
+  container.innerHTML =
+    defaults + customs;
+}
+
+
+/* =========================================================
+   PAY PERIODS
+========================================================= */
+
+function getPayPeriod(dateInput){
+
+  const date =
+    typeof dateInput === "string"
+    ? parseLocalDate(dateInput)
+    : new Date(dateInput);
+
+  date.setHours(0,0,0,0);
+
+  const difference =
+    date - PAY_PERIOD_ANCHOR;
+
+  const dayDifference =
+    Math.floor(
+      difference / 86400000
+    );
+
+  const periodIndex =
+    Math.floor(
+      dayDifference /
+      PAY_PERIOD_DAYS
+    );
+
+  const start =
+    new Date(PAY_PERIOD_ANCHOR);
+
+  start.setDate(
+    start.getDate() +
+    periodIndex * PAY_PERIOD_DAYS
+  );
+
+  const end =
+    new Date(start);
+
+  end.setDate(
+    end.getDate() +
+    PAY_PERIOD_DAYS -
+    1
+  );
+
+  return {
+    index:periodIndex,
+    start,
+    end
+  };
+}
+
+
+function getCurrentPayPeriod(){
+
+  return getPayPeriod(
+    new Date()
+  );
+}
+
+
+function periodKey(period){
+
+  return String(
+    period.index
+  );
+}
+
+
+function periodDateText(period){
+
+  const sameYear =
+    period.start.getFullYear() ===
+    period.end.getFullYear();
+
+  if(sameYear){
+
+    return (
+      formatDate(period.start) +
+      " – " +
+      formatLongDate(period.end)
+    );
+  }
+
+  return (
+    formatLongDate(period.start) +
+    " – " +
+    formatLongDate(period.end)
+  );
+}
+
+
+function transactionInPeriod(
+  transaction,
+  period
+){
+
+  const date =
+    parseLocalDate(
+      transaction.date
+    );
+
+  if(!date) return false;
+
+  return (
+    date >= period.start &&
+    date <= period.end
+  );
+}
+
+
+function transactionsForPeriod(period){
+
+  return transactions.filter(
+    transaction =>
+      transactionInPeriod(
+        transaction,
+        period
+      )
+  );
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(page,button){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      element =>
+        element.classList.remove(
+          "active"
+        )
+    );
+
+  document
+    .getElementById(page)
+    .classList.add("active");
+
+
+  document
+    .querySelectorAll(".tab")
+    .forEach(
+      element =>
+        element.classList.remove(
+          "active"
+        )
+    );
+
+  button.classList.add("active");
+
+
+  if(page === "money"){
+    loadMoneyForm();
+  }
+
+  if(page === "transactions"){
+
+    populateCategorySelect();
+
+    renderCategoryManager();
+  }
+}
+
+
+/* =========================================================
+   TRANSACTIONS
+========================================================= */
+
+function openTransactionModal(){
+
+  editingTransactionId = null;
+
+  document
+    .getElementById(
+      "transactionModalTitle"
+    )
+    .textContent =
+      "Add Transaction";
+
+
+  document
+    .getElementById(
+      "transactionAmount"
+    )
+    .value = "";
+
+
+  populateCategorySelect();
+
+
+  document
+    .getElementById(
+      "transactionCategory"
+    )
+    .value =
+      "Groceries";
+
+
+  document
+    .getElementById(
+      "transactionDescription"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "transactionDate"
+    )
+    .value =
+      localDate(new Date());
+
+
+  document
+    .getElementById(
+      "transactionModal"
+    )
+    .classList.add("show");
+
+
+  setTimeout(
+    () =>
+      document
+        .getElementById(
+          "transactionAmount"
+        )
+        .focus(),
+    100
+  );
+}
+
+
+function editTransaction(id){
+
+  const transaction =
+    transactions.find(
+      item =>
+        item.id === id
+    );
+
+  if(!transaction) return;
+
+
+  editingTransactionId = id;
+
+
+  document
+    .getElementById(
+      "transactionModalTitle"
+    )
+    .textContent =
+      "Edit Transaction";
+
+
+  document
+    .getElementById(
+      "transactionAmount"
+    )
+    .value =
+      transaction.amount;
+
+
+  populateCategorySelect();
+
+
+  document
+    .getElementById(
+      "transactionCategory"
+    )
+    .value =
+      transaction.category;
+
+
+  document
+    .getElementById(
+      "transactionDescription"
+    )
+    .value =
+      transaction.description || "";
+
+
+  document
+    .getElementById(
+      "transactionDate"
+    )
+    .value =
+      transaction.date;
+
+
+  document
+    .getElementById(
+      "transactionModal"
+    )
+    .classList.add("show");
+}
+
+
+function closeTransactionModal(){
+
+  editingTransactionId = null;
+
+  document
+    .getElementById(
+      "transactionModal"
+    )
+    .classList.remove("show");
+}
+
+
+function saveTransaction(){
+
+  const amount =
+    parseFloat(
+      document
+        .getElementById(
+          "transactionAmount"
+        )
+        .value
+    );
+
+
+  const category =
+    document
+      .getElementById(
+        "transactionCategory"
+      )
+      .value;
+
+
+  const description =
+    document
+      .getElementById(
+        "transactionDescription"
+      )
+      .value
+      .trim();
+
+
+  const date =
+    document
+      .getElementById(
+        "transactionDate"
+      )
+      .value;
+
+
+  if(
+    !Number.isFinite(amount) ||
+    amount <= 0 ||
+    !category ||
+    !date
+  ){
+
+    alert(
+      "Please enter an amount, category, and date."
+    );
+
+    return;
+  }
+
+
+  if(
+    editingTransactionId !== null
+  ){
+
+    const index =
+      transactions.findIndex(
+        transaction =>
+          transaction.id ===
+          editingTransactionId
+      );
+
+
+    if(index !== -1){
+
+      transactions[index] = {
+        ...transactions[index],
+        amount,
+        category,
+        description,
+        date
+      };
+    }
+
+  }else{
+
+    transactions.push({
+      id:Date.now(),
+      amount,
+      category,
+      description,
+      date,
+      createdAt:
+        new Date().toISOString()
+    });
+  }
+
+
+  saveTransactions();
+
+  closeTransactionModal();
+
+  render();
+}
+
+
+function deleteTransaction(id){
+
+  if(
+    !confirm(
+      "Delete this transaction?"
+    )
+  ){
+    return;
+  }
+
+
+  transactions =
+    transactions.filter(
+      transaction =>
+        transaction.id !== id
+    );
+
+
+  saveTransactions();
+
+  render();
+}
+
+
+/* =========================================================
+   TRANSACTION CALCULATIONS
+========================================================= */
+
+function getPeriodSummary(period){
+
+  const periodTransactions =
+    transactionsForPeriod(period);
+
+
+  const normal =
+    periodTransactions.filter(
+      transaction =>
+        !isSpecialCategory(
+          transaction.category
+        )
+    );
+
+
+  const debt =
+    periodTransactions
+      .filter(
+        transaction =>
+          transaction.category ===
+          "Debt Payment"
+      )
+      .reduce(
+        (sum,transaction) =>
+          sum +
+          Number(transaction.amount),
+        0
+      );
+
+
+  const savings =
+    periodTransactions
+      .filter(
+        transaction =>
+          transaction.category ===
+          "Savings"
+      )
+      .reduce(
+        (sum,transaction) =>
+          sum +
+          Number(transaction.amount),
+        0
+      );
+
+
+  const categoryTotals = {};
+
+
+  normal.forEach(
+    transaction => {
+
+      if(
+        !categoryTotals[
+          transaction.category
+        ]
+      ){
+        categoryTotals[
+          transaction.category
+        ] = 0;
+      }
+
+
+      categoryTotals[
+        transaction.category
+      ] +=
+        Number(
+          transaction.amount
+        );
+    }
+  );
+
+
+  const normalTotal =
+    normal.reduce(
+      (sum,transaction) =>
+        sum +
+        Number(transaction.amount),
+      0
+    );
+
+
+  return {
+    transactions:periodTransactions,
+    normal,
+    normalTotal,
+    debt,
+    savings,
+    categoryTotals
+  };
+}
+
+
+/*
+Transactions included in Safe to Spend:
+
+Only normal spending transactions that occurred
+after the start of the current pay period and
+through today.
+
+Debt Payment and Savings are not subtracted here
+because MoneyBoard already subtracts the amounts
+you set aside for debt and savings in Money settings.
+*/
+
+function normalSpendingCurrentPeriod(){
+
+  const period =
+    getCurrentPayPeriod();
+
+  const summary =
+    getPeriodSummary(period);
+
+  return summary.normalTotal;
+}
+
+
+/* =========================================================
+   TRANSACTION RENDERING
+========================================================= */
+
+function categoryTotalsHTML(summary){
+
+  const entries =
+    Object.entries(
+      summary.categoryTotals
+    )
+    .sort(
+      (a,b) =>
+        b[1] - a[1]
+    );
+
+
+  if(entries.length === 0){
+
+    return `
+      <div class="empty">
+        No everyday spending yet.
+      </div>
+    `;
+  }
+
+
+  return entries
+    .map(
+      ([category,total]) => `
+        <div class="category-row">
+
+          <span class="category-name">
+            ${categoryIcon(category)}
+            ${escapeHTML(category)}
+          </span>
+
+          <span class="category-amount">
+            ${moneyFormat(total)}
+          </span>
+
+        </div>
+      `
+    )
+    .join("");
+}
+
+
+function transactionHTML(transaction){
+
+  return `
+    <div class="item">
+
+      <div class="item-top">
+
+        <span>
+          ${
+            transaction.description
+            ? escapeHTML(
+                transaction.description
+              )
+            : escapeHTML(
+                transaction.category
+              )
+          }
+        </span>
+
+        <span class="transaction-amount negative">
+          −${moneyFormat(transaction.amount)}
+        </span>
+
+      </div>
+
+      <div class="item-info">
+        ${formatLongDate(transaction.date)}
+      </div>
+
+      <span class="category-badge">
+        ${categoryIcon(transaction.category)}
+        ${escapeHTML(transaction.category)}
+      </span>
+
+      <div class="actions">
+
+        <button
+          class="action edit-action"
+          onclick="editTransaction(${transaction.id})">
+          Edit
+        </button>
+
+        <button
+          class="action delete-action"
+          onclick="deleteTransaction(${transaction.id})">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+  `;
+}
+
+
+function renderCurrentTransactions(){
+
+  const container =
+    document.getElementById(
+      "transactionList"
+    );
+
+
+  const period =
+    getCurrentPayPeriod();
+
+
+  const current =
+    transactionsForPeriod(period)
+      .sort(
+        (a,b) => {
+
+          const dateDifference =
+            parseLocalDate(b.date) -
+            parseLocalDate(a.date);
+
+          if(dateDifference !== 0){
+            return dateDifference;
+          }
+
+          return b.id - a.id;
+        }
+      );
+
+
+  if(current.length === 0){
+
+    container.innerHTML = `
+      <div class="empty">
+        No transactions this pay period.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    current
+      .map(transactionHTML)
+      .join("");
+}
+
+
+function renderPeriodSummary(){
+
+  const period =
+    getCurrentPayPeriod();
+
+
+  const summary =
+    getPeriodSummary(period);
+
+
+  const dates =
+    periodDateText(period);
+
+
+  document
+    .getElementById(
+      "homePeriodDates"
+    )
+    .textContent =
+      dates;
+
+
+  document
+    .getElementById(
+      "transactionPeriodDates"
+    )
+    .textContent =
+      dates;
+
+
+  document
+    .getElementById(
+      "homePeriodTotal"
+    )
+    .textContent =
+      moneyFormat(
+        summary.normalTotal
+      );
+
+
+  document
+    .getElementById(
+      "transactionPeriodTotal"
+    )
+    .textContent =
+      moneyFormat(
+        summary.normalTotal
+      );
+
+
+  const totalsHTML =
+    categoryTotalsHTML(summary);
+
+
+  document
+    .getElementById(
+      "homeCategoryTotals"
+    )
+    .innerHTML =
+      totalsHTML;
+
+
+  document
+    .getElementById(
+      "transactionCategoryTotals"
+    )
+    .innerHTML =
+      totalsHTML;
+
+
+  document
+    .getElementById(
+      "homeDebtTransactions"
+    )
+    .textContent =
+      moneyFormat(
+        summary.debt
+      );
+
+
+  document
+    .getElementById(
+      "periodDebtTransactions"
+    )
+    .textContent =
+      moneyFormat(
+        summary.debt
+      );
+
+
+  document
+    .getElementById(
+      "homeSavingsTransactions"
+    )
+    .textContent =
+      moneyFormat(
+        summary.savings
+      );
+
+
+  document
+    .getElementById(
+      "periodSavingsTransactions"
+    )
+    .textContent =
+      moneyFormat(
+        summary.savings
+      );
+}
+
+
+/* =========================================================
+   PAY PERIOD HISTORY
+========================================================= */
+
+function renderPeriodHistory(){
+
+  const container =
+    document.getElementById(
+      "periodHistory"
+    );
+
+
+  const current =
+    getCurrentPayPeriod();
+
+
+  const previousIndexes =
+    [
+      ...new Set(
+        transactions
+          .map(
+            transaction =>
+              getPayPeriod(
+                transaction.date
+              ).index
+          )
+          .filter(
+            index =>
+              index <
+              current.index
+          )
+      )
+    ]
+    .sort(
+      (a,b) =>
+        b-a
+    );
+
+
+  if(
+    previousIndexes.length === 0
+  ){
+
+    container.innerHTML = `
+      <div class="empty">
+        Previous pay periods will appear here automatically.
+      </div>
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML =
+    previousIndexes
+      .map(
+        index => {
+
+          const start =
+            new Date(
+              PAY_PERIOD_ANCHOR
+            );
+
+          start.setDate(
+            start.getDate() +
+            index *
+            PAY_PERIOD_DAYS
+          );
+
+
+          const period =
+            getPayPeriod(start);
+
+
+          const summary =
+            getPeriodSummary(period);
+
+
+          return `
+            <div class="history-card">
+
+              <div class="history-title">
+                ${periodDateText(period)}
+              </div>
+
+              <div class="history-subtitle">
+                Spending summary
+              </div>
+
+              ${categoryTotalsHTML(summary)}
+
+              <div class="total-row">
+                <span>Total spent</span>
+                <span>
+                  ${moneyFormat(summary.normalTotal)}
+                </span>
+              </div>
+
+              ${
+                summary.debt > 0 ||
+                summary.savings > 0
+                ? `
+                  <div class="special-box">
+
+                    ${
+                      summary.debt > 0
+                      ? `
+                        <div class="special-row">
+                          <span>💳 Debt payments</span>
+                          <strong>
+                            ${moneyFormat(summary.debt)}
+                          </strong>
+                        </div>
+                      `
+                      : ""
+                    }
+
+                    ${
+                      summary.savings > 0
+                      ? `
+                        <div class="special-row">
+                          <span>💰 Savings</span>
+                          <strong>
+                            ${moneyFormat(summary.savings)}
+                          </strong>
+                        </div>
+                      `
+                      : ""
+                    }
+
+                  </div>
+                `
+                : ""
+              }
+
+            </div>
+          `;
+        }
+      )
+      .join("");
+}
+
+
+/* =========================================================
+   BILLS
+========================================================= */
 
 function getBillStatus(bill){
 
   if(bill.paid){
+
     return {
       text:"Paid",
       className:"paid"
     };
   }
 
-  const days=daysUntil(bill.dueDate);
 
-  if(days<0){
+  const days =
+    daysUntil(
+      bill.dueDate
+    );
+
+
+  if(days < 0){
+
     return {
       text:"Overdue",
       className:"overdue"
     };
   }
 
-  if(days===0){
+
+  if(days === 0){
+
     return {
       text:"Due today",
       className:"soon"
     };
   }
 
-  if(days<=3){
+
+  if(days <= 3){
+
     return {
-      text:`Due in ${days} day${days===1?"":"s"}`,
+      text:
+        `Due in ${days} day${days === 1 ? "" : "s"}`,
       className:"soon"
     };
   }
 
+
   return {
-    text:`Due ${formatDate(bill.dueDate)}`,
+    text:
+      `Due ${formatDate(bill.dueDate)}`,
     className:"normal"
   };
 }
 
 
-/* ---------- BILL MODAL ---------- */
-
 function openBillModal(){
 
-  editingBillId=null;
+  editingBillId = null;
 
-  document.getElementById("billModalTitle")
-    .textContent="Add Bill";
 
-  document.getElementById("billName").value="";
-  document.getElementById("billAmount").value="";
-  document.getElementById("billDate").value="";
-  document.getElementById("billRecurring").checked=false;
+  document
+    .getElementById(
+      "billModalTitle"
+    )
+    .textContent =
+      "Add Bill";
 
-  document.getElementById("billModal")
+
+  document
+    .getElementById(
+      "billName"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "billAmount"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "billDate"
+    )
+    .value = "";
+
+
+  document
+    .getElementById(
+      "billRecurring"
+    )
+    .checked = false;
+
+
+  document
+    .getElementById(
+      "billModal"
+    )
     .classList.add("show");
 }
+
 
 function editBill(id){
 
-  const bill=bills.find(b=>b.id===id);
+  const bill =
+    bills.find(
+      item =>
+        item.id === id
+    );
+
+
   if(!bill) return;
 
-  editingBillId=id;
 
-  document.getElementById("billModalTitle")
-    .textContent="Edit Bill";
+  editingBillId = id;
 
-  document.getElementById("billName").value=bill.name;
-  document.getElementById("billAmount").value=bill.amount;
-  document.getElementById("billDate").value=bill.dueDate;
-  document.getElementById("billRecurring").checked=!!bill.recurring;
 
-  document.getElementById("billModal")
+  document
+    .getElementById(
+      "billModalTitle"
+    )
+    .textContent =
+      "Edit Bill";
+
+
+  document
+    .getElementById(
+      "billName"
+    )
+    .value =
+      bill.name;
+
+
+  document
+    .getElementById(
+      "billAmount"
+    )
+    .value =
+      bill.amount;
+
+
+  document
+    .getElementById(
+      "billDate"
+    )
+    .value =
+      bill.dueDate;
+
+
+  document
+    .getElementById(
+      "billRecurring"
+    )
+    .checked =
+      !!bill.recurring;
+
+
+  document
+    .getElementById(
+      "billModal"
+    )
     .classList.add("show");
 }
 
-function closeBillModal(){
-  editingBillId=null;
 
-  document.getElementById("billModal")
+function closeBillModal(){
+
+  editingBillId = null;
+
+  document
+    .getElementById(
+      "billModal"
+    )
     .classList.remove("show");
 }
 
+
 function saveBill(){
 
-  const name=
-    document.getElementById("billName").value.trim();
+  const name =
+    document
+      .getElementById(
+        "billName"
+      )
+      .value
+      .trim();
 
-  const amount=
-    parseFloat(document.getElementById("billAmount").value);
 
-  const dueDate=
-    document.getElementById("billDate").value;
+  const amount =
+    parseFloat(
+      document
+        .getElementById(
+          "billAmount"
+        )
+        .value
+    );
 
-  const recurring=
-    document.getElementById("billRecurring").checked;
+
+  const dueDate =
+    document
+      .getElementById(
+        "billDate"
+      )
+      .value;
+
+
+  const recurring =
+    document
+      .getElementById(
+        "billRecurring"
+      )
+      .checked;
+
 
   if(
     !name ||
     !Number.isFinite(amount) ||
-    amount<0 ||
+    amount < 0 ||
     !dueDate
   ){
-    alert("Please enter a bill name, amount, and due date.");
+
+    alert(
+      "Please enter a bill name, amount, and due date."
+    );
+
     return;
   }
 
-  if(editingBillId!==null){
 
-    const index=
-      bills.findIndex(b=>b.id===editingBillId);
+  if(editingBillId !== null){
 
-    if(index!==-1){
+    const index =
+      bills.findIndex(
+        bill =>
+          bill.id ===
+          editingBillId
+      );
 
-      bills[index]={
+
+    if(index !== -1){
+
+      bills[index] = {
         ...bills[index],
         name,
         amount,
@@ -646,52 +2601,80 @@ function saveBill(){
     });
   }
 
+
   saveBills();
+
   closeBillModal();
+
   render();
 }
 
-
-/* ---------- PAID / RECURRING ---------- */
 
 function togglePaid(id){
 
-  const bill=bills.find(b=>b.id===id);
+  const bill =
+    bills.find(
+      item =>
+        item.id === id
+    );
+
+
   if(!bill) return;
+
 
   if(!bill.paid){
 
-    bill.paid=true;
-    bill.paidDate=localDate(new Date());
+    bill.paid = true;
+
+    bill.paidDate =
+      localDate(
+        new Date()
+      );
 
   }else{
 
-    bill.paid=false;
+    bill.paid = false;
+
     delete bill.paidDate;
   }
 
+
   saveBills();
+
   render();
 }
 
 
-/*
-When a recurring bill is paid, this button
-creates the next month's bill.
-*/
-
 function createNextMonth(id){
 
-  const bill=bills.find(b=>b.id===id);
-  if(!bill || !bill.recurring) return;
+  const bill =
+    bills.find(
+      item =>
+        item.id === id
+    );
 
-  const current=parseLocalDate(bill.dueDate);
 
-  const next=new Date(
-    current.getFullYear(),
-    current.getMonth()+1,
-    current.getDate()
-  );
+  if(
+    !bill ||
+    !bill.recurring
+  ){
+    return;
+  }
+
+
+  const current =
+    parseLocalDate(
+      bill.dueDate
+    );
+
+
+  const next =
+    new Date(
+      current.getFullYear(),
+      current.getMonth()+1,
+      current.getDate()
+    );
+
 
   bills.push({
     id:Date.now(),
@@ -702,124 +2685,71 @@ function createNextMonth(id){
     paid:false
   });
 
+
   saveBills();
+
   render();
 }
+
 
 function deleteBill(id){
 
-  if(!confirm("Delete this bill?")) return;
-
-  bills=bills.filter(b=>b.id!==id);
-
-  saveBills();
-  render();
-}
-
-
-/* ---------- MONEY SETTINGS ---------- */
-
-function loadMoneyForm(){
-
-  document.getElementById("moneyBalance").value=money.balance;
-  document.getElementById("moneyPaycheck").value=money.paycheck;
-  document.getElementById("moneyPayday").value=money.payday;
-  document.getElementById("moneySavings").value=money.savings;
-  document.getElementById("moneyDebt").value=money.debt;
-}
-
-function saveMoneySettings(){
-
-  const balance=
-    parseFloat(document.getElementById("moneyBalance").value)||0;
-
-  const paycheck=
-    parseFloat(document.getElementById("moneyPaycheck").value)||0;
-
-  const payday=
-    document.getElementById("moneyPayday").value;
-
-  const savings=
-    parseFloat(document.getElementById("moneySavings").value)||0;
-
-  const debt=
-    parseFloat(document.getElementById("moneyDebt").value)||0;
-
-  money={
-    balance,
-    paycheck,
-    payday,
-    savings,
-    debt
-  };
-
-  saveMoney();
-  render();
-
-  alert("Money settings saved.");
-}
-
-
-/* ---------- CALCULATIONS ---------- */
-
-function billsDueBeforePayday(){
-
-  if(!money.payday){
-    return bills.filter(b=>!b.paid);
+  if(
+    !confirm(
+      "Delete this bill?"
+    )
+  ){
+    return;
   }
 
-  const payday=parseLocalDate(money.payday);
 
-  return bills.filter(b=>{
-
-    if(b.paid) return false;
-
-    const due=parseLocalDate(b.dueDate);
-
-    return due && due<=payday;
-  });
-}
-
-function calculateSafeSpend(){
-
-  const dueBills=billsDueBeforePayday();
-
-  const billTotal=
-    dueBills.reduce(
-      (sum,b)=>sum+Number(b.amount),
-      0
+  bills =
+    bills.filter(
+      bill =>
+        bill.id !== id
     );
 
-  const safe=
-    money.balance -
-    billTotal -
-    money.savings -
-    money.debt;
 
-  return {
-    billTotal,
-    safe
-  };
+  saveBills();
+
+  render();
 }
 
 
-/* ---------- RENDER BILLS ---------- */
+function billHTML(
+  bill,
+  compact=false
+){
 
-function billHTML(bill,compact=false){
+  const status =
+    getBillStatus(bill);
 
-  const status=getBillStatus(bill);
 
   return `
-    <div class="bill">
+    <div class="item">
 
-      <div class="bill-top">
-        <span>${bill.name}</span>
-        <span>${moneyFormat(bill.amount)}</span>
+      <div class="item-top">
+
+        <span>
+          ${escapeHTML(bill.name)}
+        </span>
+
+        <span>
+          ${moneyFormat(bill.amount)}
+        </span>
+
       </div>
 
-      <div class="bill-info">
+      <div class="item-info">
+
         Due ${formatDate(bill.dueDate)}
-        ${bill.recurring ? " · Monthly" : ""}
+
+        ${
+          bill.recurring
+          ? " · Monthly"
+          : ""
+        }
+
       </div>
 
       <span class="badge ${status.className}">
@@ -835,7 +2765,13 @@ function billHTML(bill,compact=false){
             <button
               class="action pay-action"
               onclick="togglePaid(${bill.id})">
-              ${bill.paid ? "Mark Unpaid" : "Mark Paid"}
+
+              ${
+                bill.paid
+                ? "Mark Unpaid"
+                : "Mark Paid"
+              }
+
             </button>
 
             <button
@@ -845,7 +2781,8 @@ function billHTML(bill,compact=false){
             </button>
 
             ${
-              bill.recurring && bill.paid
+              bill.recurring &&
+              bill.paid
               ? `
                 <button
                   class="action edit-action"
@@ -870,113 +2807,437 @@ function billHTML(bill,compact=false){
   `;
 }
 
+
 function renderBills(){
 
-  const list=document.getElementById("billList");
+  const list =
+    document.getElementById(
+      "billList"
+    );
 
-  if(bills.length===0){
 
-    list.innerHTML=
-      `<div class="empty">
+  if(bills.length === 0){
+
+    list.innerHTML = `
+      <div class="empty">
         No bills added yet.
-      </div>`;
+      </div>
+    `;
 
     return;
   }
 
-  const sorted=[...bills].sort((a,b)=>{
-    return parseLocalDate(a.dueDate)-parseLocalDate(b.dueDate);
-  });
 
-  list.innerHTML=
-    sorted.map(b=>billHTML(b)).join("");
+  const sorted =
+    [...bills].sort(
+      (a,b) =>
+        parseLocalDate(a.dueDate) -
+        parseLocalDate(b.dueDate)
+    );
+
+
+  list.innerHTML =
+    sorted
+      .map(
+        bill =>
+          billHTML(bill)
+      )
+      .join("");
 }
 
-
-/* ---------- UPCOMING ---------- */
 
 function renderUpcoming(){
 
-  const container=
-    document.getElementById("upcomingBills");
+  const container =
+    document.getElementById(
+      "upcomingBills"
+    );
 
-  const upcoming=
+
+  const upcoming =
     bills
-    .filter(b=>!b.paid)
-    .sort((a,b)=>
-      parseLocalDate(a.dueDate)-parseLocalDate(b.dueDate)
-    )
-    .slice(0,4);
+      .filter(
+        bill =>
+          !bill.paid
+      )
+      .sort(
+        (a,b) =>
+          parseLocalDate(a.dueDate) -
+          parseLocalDate(b.dueDate)
+      )
+      .slice(0,4);
 
-  if(upcoming.length===0){
 
-    container.innerHTML=
-      `<div class="empty">
+  if(upcoming.length === 0){
+
+    container.innerHTML = `
+      <div class="empty">
         Nothing coming up.
-      </div>`;
+      </div>
+    `;
 
     return;
   }
 
-  container.innerHTML=
-    upcoming.map(b=>billHTML(b,true)).join("");
+
+  container.innerHTML =
+    upcoming
+      .map(
+        bill =>
+          billHTML(
+            bill,
+            true
+          )
+      )
+      .join("");
 }
 
 
-/* ---------- MAIN RENDER ---------- */
+/* =========================================================
+   MONEY SETTINGS
+========================================================= */
+
+function loadMoneyForm(){
+
+  document
+    .getElementById(
+      "moneyBalance"
+    )
+    .value =
+      money.balance;
+
+
+  document
+    .getElementById(
+      "moneyPaycheck"
+    )
+    .value =
+      money.paycheck;
+
+
+  document
+    .getElementById(
+      "moneyPayday"
+    )
+    .value =
+      money.payday;
+
+
+  document
+    .getElementById(
+      "moneySavings"
+    )
+    .value =
+      money.savings;
+
+
+  document
+    .getElementById(
+      "moneyDebt"
+    )
+    .value =
+      money.debt;
+}
+
+
+function saveMoneySettings(){
+
+  const balance =
+    parseFloat(
+      document
+        .getElementById(
+          "moneyBalance"
+        )
+        .value
+    ) || 0;
+
+
+  const paycheck =
+    parseFloat(
+      document
+        .getElementById(
+          "moneyPaycheck"
+        )
+        .value
+    ) || 0;
+
+
+  const payday =
+    document
+      .getElementById(
+        "moneyPayday"
+      )
+      .value;
+
+
+  const savings =
+    parseFloat(
+      document
+        .getElementById(
+          "moneySavings"
+        )
+        .value
+    ) || 0;
+
+
+  const debt =
+    parseFloat(
+      document
+        .getElementById(
+          "moneyDebt"
+        )
+        .value
+    ) || 0;
+
+
+  money = {
+    balance,
+    paycheck,
+    payday,
+    savings,
+    debt
+  };
+
+
+  saveMoney();
+
+  render();
+
+  alert(
+    "Money settings saved."
+  );
+}
+
+
+/* =========================================================
+   SAFE TO SPEND
+========================================================= */
+
+function billsDueBeforePayday(){
+
+  if(!money.payday){
+
+    return bills.filter(
+      bill =>
+        !bill.paid
+    );
+  }
+
+
+  const payday =
+    parseLocalDate(
+      money.payday
+    );
+
+
+  return bills.filter(
+    bill => {
+
+      if(bill.paid){
+        return false;
+      }
+
+
+      const due =
+        parseLocalDate(
+          bill.dueDate
+        );
+
+
+      return (
+        due &&
+        due <= payday
+      );
+    }
+  );
+}
+
+
+function calculateSafeSpend(){
+
+  const dueBills =
+    billsDueBeforePayday();
+
+
+  const billTotal =
+    dueBills.reduce(
+      (sum,bill) =>
+        sum +
+        Number(bill.amount),
+      0
+    );
+
+
+  const spending =
+    normalSpendingCurrentPeriod();
+
+
+  const safe =
+    Number(money.balance) -
+    billTotal -
+    Number(money.savings) -
+    Number(money.debt) -
+    spending;
+
+
+  return {
+    billTotal,
+    spending,
+    safe
+  };
+}
+
+
+/* =========================================================
+   MAIN RENDER
+========================================================= */
 
 function render(){
 
-  const calc=calculateSafeSpend();
+  const calc =
+    calculateSafeSpend();
 
-  document.getElementById("currentBalance")
-    .textContent=moneyFormat(money.balance);
 
-  document.getElementById("paycheckAmount")
-    .textContent=moneyFormat(money.paycheck);
+  document
+    .getElementById(
+      "currentBalance"
+    )
+    .textContent =
+      moneyFormat(
+        money.balance
+      );
 
-  document.getElementById("paydayText")
-    .textContent=formatDate(money.payday);
 
-  const safeElement=
-    document.getElementById("safeSpend");
+  document
+    .getElementById(
+      "paycheckAmount"
+    )
+    .textContent =
+      moneyFormat(
+        money.paycheck
+      );
 
-  safeElement.textContent=
-    moneyFormat(calc.safe);
 
-  if(calc.safe<0){
-    safeElement.classList.add("red");
+  document
+    .getElementById(
+      "paydayText"
+    )
+    .textContent =
+      formatDate(
+        money.payday
+      );
+
+
+  const safeElement =
+    document.getElementById(
+      "safeSpend"
+    );
+
+
+  safeElement.textContent =
+    moneyFormat(
+      calc.safe
+    );
+
+
+  if(calc.safe < 0){
+
+    safeElement
+      .classList
+      .add("red");
+
   }else{
-    safeElement.classList.remove("red");
+
+    safeElement
+      .classList
+      .remove("red");
   }
 
-  document.getElementById("billsBeforePay")
-    .textContent=moneyFormat(calc.billTotal);
 
-  document.getElementById("debtAmount")
-    .textContent=moneyFormat(money.debt);
+  document
+    .getElementById(
+      "billsBeforePay"
+    )
+    .textContent =
+      moneyFormat(
+        calc.billTotal
+      );
 
-  document.getElementById("savingsAmount")
-    .textContent=moneyFormat(money.savings);
 
-  if(calc.safe<0){
+  document
+    .getElementById(
+      "spendingBeforePay"
+    )
+    .textContent =
+      moneyFormat(
+        calc.spending
+      );
 
-    document.getElementById("safeExplanation")
-      .textContent=
-      `You're ${moneyFormat(Math.abs(calc.safe))} short of the money currently set aside for upcoming bills and goals.`;
+
+  document
+    .getElementById(
+      "debtAmount"
+    )
+    .textContent =
+      moneyFormat(
+        money.debt
+      );
+
+
+  document
+    .getElementById(
+      "savingsAmount"
+    )
+    .textContent =
+      moneyFormat(
+        money.savings
+      );
+
+
+  if(calc.safe < 0){
+
+    document
+      .getElementById(
+        "safeExplanation"
+      )
+      .textContent =
+        `You're ${moneyFormat(Math.abs(calc.safe))} over the amount currently available after your bills, spending, savings, and debt plans.`;
 
   }else{
 
-    document.getElementById("safeExplanation")
-      .textContent=
-      "Estimated amount left after bills due before payday, savings, and planned debt payments.";
+    document
+      .getElementById(
+        "safeExplanation"
+      )
+      .textContent =
+        "Amount left after upcoming bills, this pay period's everyday spending, savings, and planned debt payments.";
   }
+
 
   renderBills();
+
   renderUpcoming();
+
+  renderPeriodSummary();
+
+  renderCurrentTransactions();
+
+  renderPeriodHistory();
+
+  renderCategoryManager();
+
+  populateCategorySelect();
 }
 
+
+/* =========================================================
+   START APP
+========================================================= */
+
 loadMoneyForm();
+
+populateCategorySelect();
+
 render();
 
 </script>
