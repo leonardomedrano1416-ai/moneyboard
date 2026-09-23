@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<title>MoneyBoard</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:#f3f4f6;
+  color:#111827;
+}
+.app{
+  max-width:520px;
+  margin:auto;
+  min-height:100vh;
+  padding:24px 18px 110px;
+}
+h1{margin:0;font-size:32px}
+.subtitle{color:#6b7280;margin:4px 0 22px}
+
+.card{
+  background:white;
+  border-radius:22px;
+  padding:20px;
+  margin-bottom:16px;
+  box-shadow:0 5px 20px rgba(0,0,0,.06);
+}
+.label{
+  font-size:12px;
+  font-weight:700;
+  color:#6b7280;
+  letter-spacing:1px;
+}
+.big{
+  font-size:40px;
+  font-weight:800;
+  margin-top:6px;
+}
+.green{color:#16803c}
+.red{color:#b91c1c}
+.orange{color:#b45309}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:16px;
+}
+.stat{
+  background:#f8fafc;
+  border-radius:16px;
+  padding:14px;
+}
+.stat-name{font-size:12px;color:#6b7280}
+.stat-value{font-size:19px;font-weight:750;margin-top:4px}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+}
+.tab{
+  flex:1;
+  border:0;
+  padding:11px 5px;
+  border-radius:12px;
+  background:#e5e7eb;
+  font-weight:700;
+  cursor:pointer;
+}
+.tab.active{background:#111827;color:white}
+
+.page{display:none}
+.page.active{display:block}
+
+.primary{
+  width:100%;
+  border:0;
+  border-radius:16px;
+  padding:16px;
+  background:#111827;
+  color:white;
+  font-weight:800;
+  font-size:16px;
+  cursor:pointer;
+}
+.secondary{
+  width:100%;
+  border:1px solid #d1d5db;
+  border-radius:14px;
+  padding:13px;
+  background:white;
+  font-weight:700;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.bill{
+  padding:14px 0;
+  border-bottom:1px solid #eee;
+}
+.bill:last-child{border-bottom:0}
+.bill-top{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  font-weight:750;
+}
+.bill-info{
+  color:#6b7280;
+  font-size:14px;
+  margin-top:4px;
+}
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  margin-top:7px;
+}
+.badge.normal{background:#e5e7eb;color:#374151}
+.badge.soon{background:#fef3c7;color:#92400e}
+.badge.overdue{background:#fee2e2;color:#991b1b}
+.badge.paid{background:#dcfce7;color:#166534}
+
+.actions{
+  display:flex;
+  gap:14px;
+  margin-top:10px;
+}
+.action{
+  border:0;
+  background:none;
+  padding:0;
+  cursor:pointer;
+  font-weight:700;
+  font-size:13px;
+}
+.pay-action{color:#16803c}
+.edit-action{color:#2563eb}
+.delete-action{color:#b91c1c}
+
+input,select{
+  width:100%;
+  padding:13px;
+  margin:6px 0 14px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  font-size:16px;
+  background:white;
+}
+.form-label{
+  font-size:14px;
+  font-weight:700;
+}
+.check-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:5px 0 16px;
+}
+.check-row input{
+  width:auto;
+  margin:0;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  z-index:20;
+}
+.modal.show{display:flex}
+.modal-box{
+  background:white;
+  width:100%;
+  max-width:480px;
+  max-height:90vh;
+  overflow:auto;
+  border-radius:22px;
+  padding:22px;
+}
+.modal-box h2{margin-top:0}
+.modal-actions{
+  display:flex;
+  gap:10px;
+}
+.modal-actions button{flex:1}
+
+.empty{
+  text-align:center;
+  color:#6b7280;
+  padding:18px;
+}
+.note{
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.45;
+  margin-top:10px;
+}
+.safe-box{
+  background:#ecfdf5;
+  border-radius:18px;
+  padding:18px;
+  margin-top:18px;
+}
+.safe-label{
+  font-size:12px;
+  font-weight:800;
+  color:#166534;
+  letter-spacing:1px;
+}
+.safe-number{
+  font-size:38px;
+  font-weight:850;
+  color:#166534;
+  margin-top:3px;
+}
+.breakdown{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 0;
+  border-bottom:1px solid #eee;
+}
+.breakdown:last-child{border-bottom:0}
+.breakdown span:last-child{font-weight:750}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>MoneyBoard</h1>
+<div class="subtitle">Know what you can safely spend.</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPage('home',this)">Home</button>
+  <button class="tab" onclick="showPage('bills',this)">Bills</button>
+  <button class="tab" onclick="showPage('money',this)">Money</button>
+</div>
+
+<!-- HOME -->
+<div id="home" class="page active">
+
+  <div class="card">
+    <div class="label">MONEY AVAILABLE NOW</div>
+    <div class="big" id="currentBalance">$0.00</div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-name">Next paycheck</div>
+        <div class="stat-value" id="paycheckAmount">$0.00</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-name">Payday</div>
+        <div class="stat-value" id="paydayText">Not set</div>
+      </div>
+    </div>
+
+    <div class="safe-box">
+      <div class="safe-label">SAFE TO SPEND</div>
+      <div class="safe-number" id="safeSpend">$0.00</div>
+      <div class="note" id="safeExplanation">
+        Based on your available money and planned expenses.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">BEFORE NEXT PAYCHECK</div>
+
+    <div class="breakdown">
+      <span>Bills due</span>
+      <span id="billsBeforePay">$0.00</span>
+    </div>
+
+    <div class="breakdown">
+      <span>Debt set aside</span>
+      <span id="debtAmount">$0.00</span>
+    </div>
+
+    <div class="breakdown">
+      <span>Savings set aside</span>
+      <span id="savingsAmount">$0.00</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="label">COMING UP</div>
+    <div id="upcomingBills"></div>
+  </div>
+
+</div>
+
+
+<!-- BILLS -->
+<div id="bills" class="page">
+
+  <div class="card">
+    <button class="primary" onclick="openBillModal()">
+      + ADD BILL
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="label">YOUR BILLS</div>
+    <div id="billList"></div>
+  </div>
+
+</div>
+
+
+<!-- MONEY -->
+<div id="money" class="page">
+
+  <div class="card">
+
+    <div class="label">MONEY SETTINGS</div>
+
+    <div class="form-label">Current Available Balance</div>
+    <input type="number" step="0.01" id="moneyBalance">
+
+    <div class="form-label">Expected Next Paycheck</div>
+    <input type="number" step="0.01" id="moneyPaycheck">
+
+    <div class="form-label">Next Payday</div>
+    <input type="date" id="moneyPayday">
+
+    <div class="form-label">Set Aside for Savings</div>
+    <input type="number" step="0.01" id="moneySavings">
+
+    <div class="form-label">Set Aside for Debt</div>
+    <input type="number" step="0.01" id="moneyDebt">
+
+    <button class="primary" onclick="saveMoneySettings()">
+      SAVE
+    </button>
+
+    <div class="note">
+      “Safe to Spend” subtracts unpaid bills due before your next paycheck,
+      savings, and planned debt payments from your current available balance.
+      Your expected paycheck is shown separately and is not counted until you
+      actually receive it.
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<!-- BILL MODAL -->
+
+<div class="modal" id="billModal">
+<div class="modal-box">
+
+<h2 id="billModalTitle">Add Bill</h2>
+
+<div class="form-label">Bill Name</div>
+<input type="text" id="billName" placeholder="Example: Phone">
+
+<div class="form-label">Amount</div>
+<input type="number" step="0.01" id="billAmount" placeholder="0.00">
+
+<div class="form-label">Due Date</div>
+<input type="date" id="billDate">
+
+<div class="check-row">
+  <input type="checkbox" id="billRecurring">
+  <label for="billRecurring">Repeat monthly</label>
+</div>
+
+<div class="modal-actions">
+  <button class="secondary" onclick="closeBillModal()">Cancel</button>
+  <button class="primary" onclick="saveBill()">Save</button>
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+const DEFAULT_MONEY = {
+  balance:0,
+  paycheck:0,
+  payday:"",
+  savings:0,
+  debt:0
+};
+
+let money =
+  JSON.parse(localStorage.getItem("moneyboard_money"))
+  || {...DEFAULT_MONEY};
+
+let bills =
+  JSON.parse(localStorage.getItem("moneyboard_bills"))
+  || [];
+
+let editingBillId = null;
+
+
+/* ---------- STORAGE ---------- */
+
+function saveBills(){
+  localStorage.setItem(
+    "moneyboard_bills",
+    JSON.stringify(bills)
+  );
+}
+
+function saveMoney(){
+  localStorage.setItem(
+    "moneyboard_money",
+    JSON.stringify(money)
+  );
+}
+
+
+/* ---------- HELPERS ---------- */
+
+function moneyFormat(value){
+  return new Intl.NumberFormat("en-US",{
+    style:"currency",
+    currency:"USD"
+  }).format(Number(value) || 0);
+}
+
+function localDate(date){
+  return (
+    date.getFullYear() + "-" +
+    String(date.getMonth()+1).padStart(2,"0") + "-" +
+    String(date.getDate()).padStart(2,"0")
+  );
+}
+
+function parseLocalDate(value){
+  if(!value) return null;
+
+  const parts=value.split("-").map(Number);
+
+  return new Date(
+    parts[0],
+    parts[1]-1,
+    parts[2],
+    0,0,0,0
+  );
+}
+
+function formatDate(value){
+  const date=parseLocalDate(value);
+
+  if(!date) return "Not set";
+
+  return date.toLocaleDateString("en-US",{
+    month:"short",
+    day:"numeric"
+  });
+}
+
+function todayStart(){
+  const d=new Date();
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function daysUntil(dateString){
+  const date=parseLocalDate(dateString);
+  if(!date) return 99999;
+
+  return Math.round(
+    (date-todayStart())/86400000
+  );
+}
+
+
+/* ---------- NAV ---------- */
+
+function showPage(page,button){
+
+  document.querySelectorAll(".page")
+    .forEach(p=>p.classList.remove("active"));
+
+  document.getElementById(page)
+    .classList.add("active");
+
+  document.querySelectorAll(".tab")
+    .forEach(t=>t.classList.remove("active"));
+
+  button.classList.add("active");
+
+  if(page==="money"){
+    loadMoneyForm();
+  }
+}
+
+
+/* ---------- BILL STATUS ---------- */
+
+function getBillStatus(bill){
+
+  if(bill.paid){
+    return {
+      text:"Paid",
+      className:"paid"
+    };
+  }
+
+  const days=daysUntil(bill.dueDate);
+
+  if(days<0){
+    return {
+      text:"Overdue",
+      className:"overdue"
+    };
+  }
+
+  if(days===0){
+    return {
+      text:"Due today",
+      className:"soon"
+    };
+  }
+
+  if(days<=3){
+    return {
+      text:`Due in ${days} day${days===1?"":"s"}`,
+      className:"soon"
+    };
+  }
+
+  return {
+    text:`Due ${formatDate(bill.dueDate)}`,
+    className:"normal"
+  };
+}
+
+
+/* ---------- BILL MODAL ---------- */
+
+function openBillModal(){
+
+  editingBillId=null;
+
+  document.getElementById("billModalTitle")
+    .textContent="Add Bill";
+
+  document.getElementById("billName").value="";
+  document.getElementById("billAmount").value="";
+  document.getElementById("billDate").value="";
+  document.getElementById("billRecurring").checked=false;
+
+  document.getElementById("billModal")
+    .classList.add("show");
+}
+
+function editBill(id){
+
+  const bill=bills.find(b=>b.id===id);
+  if(!bill) return;
+
+  editingBillId=id;
+
+  document.getElementById("billModalTitle")
+    .textContent="Edit Bill";
+
+  document.getElementById("billName").value=bill.name;
+  document.getElementById("billAmount").value=bill.amount;
+  document.getElementById("billDate").value=bill.dueDate;
+  document.getElementById("billRecurring").checked=!!bill.recurring;
+
+  document.getElementById("billModal")
+    .classList.add("show");
+}
+
+function closeBillModal(){
+  editingBillId=null;
+
+  document.getElementById("billModal")
+    .classList.remove("show");
+}
+
+function saveBill(){
+
+  const name=
+    document.getElementById("billName").value.trim();
+
+  const amount=
+    parseFloat(document.getElementById("billAmount").value);
+
+  const dueDate=
+    document.getElementById("billDate").value;
+
+  const recurring=
+    document.getElementById("billRecurring").checked;
+
+  if(
+    !name ||
+    !Number.isFinite(amount) ||
+    amount<0 ||
+    !dueDate
+  ){
+    alert("Please enter a bill name, amount, and due date.");
+    return;
+  }
+
+  if(editingBillId!==null){
+
+    const index=
+      bills.findIndex(b=>b.id===editingBillId);
+
+    if(index!==-1){
+
+      bills[index]={
+        ...bills[index],
+        name,
+        amount,
+        dueDate,
+        recurring
+      };
+    }
+
+  }else{
+
+    bills.push({
+      id:Date.now(),
+      name,
+      amount,
+      dueDate,
+      recurring,
+      paid:false
+    });
+  }
+
+  saveBills();
+  closeBillModal();
+  render();
+}
+
+
+/* ---------- PAID / RECURRING ---------- */
+
+function togglePaid(id){
+
+  const bill=bills.find(b=>b.id===id);
+  if(!bill) return;
+
+  if(!bill.paid){
+
+    bill.paid=true;
+    bill.paidDate=localDate(new Date());
+
+  }else{
+
+    bill.paid=false;
+    delete bill.paidDate;
+  }
+
+  saveBills();
+  render();
+}
+
+
+/*
+When a recurring bill is paid, this button
+creates the next month's bill.
+*/
+
+function createNextMonth(id){
+
+  const bill=bills.find(b=>b.id===id);
+  if(!bill || !bill.recurring) return;
+
+  const current=parseLocalDate(bill.dueDate);
+
+  const next=new Date(
+    current.getFullYear(),
+    current.getMonth()+1,
+    current.getDate()
+  );
+
+  bills.push({
+    id:Date.now(),
+    name:bill.name,
+    amount:bill.amount,
+    dueDate:localDate(next),
+    recurring:true,
+    paid:false
+  });
+
+  saveBills();
+  render();
+}
+
+function deleteBill(id){
+
+  if(!confirm("Delete this bill?")) return;
+
+  bills=bills.filter(b=>b.id!==id);
+
+  saveBills();
+  render();
+}
+
+
+/* ---------- MONEY SETTINGS ---------- */
+
+function loadMoneyForm(){
+
+  document.getElementById("moneyBalance").value=money.balance;
+  document.getElementById("moneyPaycheck").value=money.paycheck;
+  document.getElementById("moneyPayday").value=money.payday;
+  document.getElementById("moneySavings").value=money.savings;
+  document.getElementById("moneyDebt").value=money.debt;
+}
+
+function saveMoneySettings(){
+
+  const balance=
+    parseFloat(document.getElementById("moneyBalance").value)||0;
+
+  const paycheck=
+    parseFloat(document.getElementById("moneyPaycheck").value)||0;
+
+  const payday=
+    document.getElementById("moneyPayday").value;
+
+  const savings=
+    parseFloat(document.getElementById("moneySavings").value)||0;
+
+  const debt=
+    parseFloat(document.getElementById("moneyDebt").value)||0;
+
+  money={
+    balance,
+    paycheck,
+    payday,
+    savings,
+    debt
+  };
+
+  saveMoney();
+  render();
+
+  alert("Money settings saved.");
+}
+
+
+/* ---------- CALCULATIONS ---------- */
+
+function billsDueBeforePayday(){
+
+  if(!money.payday){
+    return bills.filter(b=>!b.paid);
+  }
+
+  const payday=parseLocalDate(money.payday);
+
+  return bills.filter(b=>{
+
+    if(b.paid) return false;
+
+    const due=parseLocalDate(b.dueDate);
+
+    return due && due<=payday;
+  });
+}
+
+function calculateSafeSpend(){
+
+  const dueBills=billsDueBeforePayday();
+
+  const billTotal=
+    dueBills.reduce(
+      (sum,b)=>sum+Number(b.amount),
+      0
+    );
+
+  const safe=
+    money.balance -
+    billTotal -
+    money.savings -
+    money.debt;
+
+  return {
+    billTotal,
+    safe
+  };
+}
+
+
+/* ---------- RENDER BILLS ---------- */
+
+function billHTML(bill,compact=false){
+
+  const status=getBillStatus(bill);
+
+  return `
+    <div class="bill">
+
+      <div class="bill-top">
+        <span>${bill.name}</span>
+        <span>${moneyFormat(bill.amount)}</span>
+      </div>
+
+      <div class="bill-info">
+        Due ${formatDate(bill.dueDate)}
+        ${bill.recurring ? " · Monthly" : ""}
+      </div>
+
+      <span class="badge ${status.className}">
+        ${status.text}
+      </span>
+
+      ${
+        compact
+        ? ""
+        : `
+          <div class="actions">
+
+            <button
+              class="action pay-action"
+              onclick="togglePaid(${bill.id})">
+              ${bill.paid ? "Mark Unpaid" : "Mark Paid"}
+            </button>
+
+            <button
+              class="action edit-action"
+              onclick="editBill(${bill.id})">
+              Edit
+            </button>
+
+            ${
+              bill.recurring && bill.paid
+              ? `
+                <button
+                  class="action edit-action"
+                  onclick="createNextMonth(${bill.id})">
+                  Next Month
+                </button>
+              `
+              : ""
+            }
+
+            <button
+              class="action delete-action"
+              onclick="deleteBill(${bill.id})">
+              Delete
+            </button>
+
+          </div>
+        `
+      }
+
+    </div>
+  `;
+}
+
+function renderBills(){
+
+  const list=document.getElementById("billList");
+
+  if(bills.length===0){
+
+    list.innerHTML=
+      `<div class="empty">
+        No bills added yet.
+      </div>`;
+
+    return;
+  }
+
+  const sorted=[...bills].sort((a,b)=>{
+    return parseLocalDate(a.dueDate)-parseLocalDate(b.dueDate);
+  });
+
+  list.innerHTML=
+    sorted.map(b=>billHTML(b)).join("");
+}
+
+
+/* ---------- UPCOMING ---------- */
+
+function renderUpcoming(){
+
+  const container=
+    document.getElementById("upcomingBills");
+
+  const upcoming=
+    bills
+    .filter(b=>!b.paid)
+    .sort((a,b)=>
+      parseLocalDate(a.dueDate)-parseLocalDate(b.dueDate)
+    )
+    .slice(0,4);
+
+  if(upcoming.length===0){
+
+    container.innerHTML=
+      `<div class="empty">
+        Nothing coming up.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML=
+    upcoming.map(b=>billHTML(b,true)).join("");
+}
+
+
+/* ---------- MAIN RENDER ---------- */
+
+function render(){
+
+  const calc=calculateSafeSpend();
+
+  document.getElementById("currentBalance")
+    .textContent=moneyFormat(money.balance);
+
+  document.getElementById("paycheckAmount")
+    .textContent=moneyFormat(money.paycheck);
+
+  document.getElementById("paydayText")
+    .textContent=formatDate(money.payday);
+
+  const safeElement=
+    document.getElementById("safeSpend");
+
+  safeElement.textContent=
+    moneyFormat(calc.safe);
+
+  if(calc.safe<0){
+    safeElement.classList.add("red");
+  }else{
+    safeElement.classList.remove("red");
+  }
+
+  document.getElementById("billsBeforePay")
+    .textContent=moneyFormat(calc.billTotal);
+
+  document.getElementById("debtAmount")
+    .textContent=moneyFormat(money.debt);
+
+  document.getElementById("savingsAmount")
+    .textContent=moneyFormat(money.savings);
+
+  if(calc.safe<0){
+
+    document.getElementById("safeExplanation")
+      .textContent=
+      `You're ${moneyFormat(Math.abs(calc.safe))} short of the money currently set aside for upcoming bills and goals.`;
+
+  }else{
+
+    document.getElementById("safeExplanation")
+      .textContent=
+      "Estimated amount left after bills due before payday, savings, and planned debt payments.";
+  }
+
+  renderBills();
+  renderUpcoming();
+}
+
+loadMoneyForm();
+render();
+
+</script>
+
+</body>
+</html>
