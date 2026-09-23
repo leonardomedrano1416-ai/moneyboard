@@ -3059,31 +3059,58 @@ function calculateSafeSpend(){
   const dueBills =
     billsDueBeforePayday();
 
-
   const billTotal =
     dueBills.reduce(
       (sum,bill) =>
-        sum +
-        Number(bill.amount),
+        sum + Number(bill.amount),
       0
     );
 
+  const summary =
+    getPeriodSummary(
+      getCurrentPayPeriod()
+    );
 
   const spending =
-    normalSpendingCurrentPeriod();
+    Number(summary.normalTotal);
 
+  // Every recorded transaction represents money that has
+  // actually left the available balance.
+  const cashOutflow =
+    Number(summary.normalTotal) +
+    Number(summary.debt) +
+    Number(summary.savings);
+
+  const actualBalance =
+    Number(money.balance) -
+    cashOutflow;
+
+  // Debt/savings already recorded as transactions should not
+  // be reserved a second time.
+  const remainingSavings =
+    Math.max(
+      0,
+      Number(money.savings) -
+      Number(summary.savings)
+    );
+
+  const remainingDebt =
+    Math.max(
+      0,
+      Number(money.debt) -
+      Number(summary.debt)
+    );
 
   const safe =
-    Number(money.balance) -
+    actualBalance -
     billTotal -
-    Number(money.savings) -
-    Number(money.debt) -
-    spending;
-
+    remainingSavings -
+    remainingDebt;
 
   return {
     billTotal,
     spending,
+    actualBalance,
     safe
   };
 }
@@ -3105,7 +3132,7 @@ function render(){
     )
     .textContent =
       moneyFormat(
-        money.balance
+        calc.actualBalance
       );
 
 
