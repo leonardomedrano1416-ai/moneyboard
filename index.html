@@ -729,6 +729,31 @@ select{
 <div id="money" class="page">
 
   <div class="card">
+    <div class="label">PAYCHECK CALCULATOR</div>
+    <div class="note" style="margin-bottom:14px">Estimate your next take-home pay using your real paycheck deductions.</div>
+
+    <div class="form-label">Regular Hours</div>
+    <input type="number" step="0.01" id="calcRegularHours" value="80">
+    <div class="form-label">Overtime Hours</div>
+    <input type="number" step="0.01" id="calcOvertimeHours" value="0">
+    <div class="form-label">Vacation / PTO Hours</div>
+    <input type="number" step="0.01" id="calcVacationHours" value="0">
+    <div class="form-label">Hourly Rate</div>
+    <input type="number" step="0.01" id="calcHourlyRate" value="25.50">
+
+    <div class="special-box">
+      <div class="special-row"><span>Estimated gross</span><strong id="calcGross">$0.00</strong></div>
+      <div class="special-row"><span>Federal withholding</span><strong id="calcFederal">−$0.00</strong></div>
+      <div class="special-row"><span>Social Security</span><strong id="calcSocialSecurity">−$0.00</strong></div>
+      <div class="special-row"><span>Medicare</span><strong id="calcMedicare">−$0.00</strong></div>
+      <div class="total-row"><span>Estimated take-home</span><span id="calcNet">$0.00</span></div>
+    </div>
+
+    <div class="note">Calibrated from your latest check: $2,381.70 gross, $257.00 federal, $147.67 Social Security, $34.53 Medicare, and $1,942.50 net. Federal withholding is estimated from that check, so future checks can vary.</div>
+    <button class="primary" style="margin-top:16px" onclick="usePaycheckEstimate()">USE AS NEXT PAYCHECK</button>
+  </div>
+
+  <div class="card">
 
     <div class="label">MONEY SETTINGS</div>
 
@@ -3011,6 +3036,61 @@ function saveMoneySettings(){
 
 
 /* =========================================================
+   PAYCHECK CALCULATOR
+========================================================= */
+
+const PAYCHECK_CALIBRATION = {
+  federalRate:257.00 / 2381.70,
+  socialSecurityRate:0.062,
+  medicareRate:0.0145
+};
+
+function paycheckNumber(id){
+  const element=document.getElementById(id);
+  return element ? Math.max(0,parseFloat(element.value)||0) : 0;
+}
+
+function calculatePaycheckEstimate(){
+  const regularHours=paycheckNumber("calcRegularHours");
+  const overtimeHours=paycheckNumber("calcOvertimeHours");
+  const vacationHours=paycheckNumber("calcVacationHours");
+  const hourlyRate=paycheckNumber("calcHourlyRate");
+
+  const gross=(regularHours*hourlyRate)+(overtimeHours*hourlyRate*1.5)+(vacationHours*hourlyRate);
+  const federal=gross*PAYCHECK_CALIBRATION.federalRate;
+  const socialSecurity=gross*PAYCHECK_CALIBRATION.socialSecurityRate;
+  const medicare=gross*PAYCHECK_CALIBRATION.medicareRate;
+  const net=gross-federal-socialSecurity-medicare;
+
+  return {gross,federal,socialSecurity,medicare,net};
+}
+
+function renderPaycheckCalculator(){
+  if(!document.getElementById("calcGross")) return;
+  const e=calculatePaycheckEstimate();
+  document.getElementById("calcGross").textContent=moneyFormat(e.gross);
+  document.getElementById("calcFederal").textContent="−"+moneyFormat(e.federal);
+  document.getElementById("calcSocialSecurity").textContent="−"+moneyFormat(e.socialSecurity);
+  document.getElementById("calcMedicare").textContent="−"+moneyFormat(e.medicare);
+  document.getElementById("calcNet").textContent=moneyFormat(e.net);
+}
+
+function usePaycheckEstimate(){
+  const e=calculatePaycheckEstimate();
+  money.paycheck=Math.round(e.net*100)/100;
+  saveMoney();
+  render();
+  loadMoneyForm();
+  alert("Expected next paycheck updated to "+moneyFormat(money.paycheck));
+}
+
+["calcRegularHours","calcOvertimeHours","calcVacationHours","calcHourlyRate"].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener("input",renderPaycheckCalculator);
+});
+
+
+/* =========================================================
    SAFE TO SPEND
 ========================================================= */
 
@@ -3121,6 +3201,8 @@ function calculateSafeSpend(){
 ========================================================= */
 
 function render(){
+
+  renderPaycheckCalculator();
 
   const calc =
     calculateSafeSpend();
