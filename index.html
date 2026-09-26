@@ -3046,31 +3046,35 @@ const PAYCHECK_CALIBRATION = {
 };
 
 function formatHoursMinutesInput(element){
-  let digits=element.value.replace(/\D/g,"");
+  const digits=element.value.replace(/\D/g,"").slice(0,6);
 
   if(!digits){
     element.value="";
     return;
   }
 
-  // Keep a practical maximum of 4 hour digits + 2 minute digits.
-  digits=digits.slice(0,6);
-
-  if(digits.length <= 2){
+  // Wait until there are at least 3 digits.
+  // Example: 5 -> 50 -> 5:04 after the user types 504.
+  if(digits.length < 3){
     element.value=digits;
     return;
   }
 
-  const hours=digits.slice(0,-2).replace(/^0+(?=\d)/,"") || "0";
-  let minutes=digits.slice(-2);
+  const minuteDigits=digits.slice(-2);
+  const minutes=Number(minuteDigits);
 
-  // Minutes must be 00-59. If the typed pair is invalid,
-  // keep the latest digit as the start of the minutes portion.
-  if(Number(minutes) > 59){
-    minutes="0"+minutes.slice(-1);
+  // If the last two digits cannot be minutes yet, keep collecting digits.
+  // Example: typing 774 stays "774" because 74 is not a valid minute value.
+  // The next digit makes 7748 -> 77:48.
+  if(minutes > 59){
+    element.value=digits;
+    return;
   }
 
-  element.value=hours+":"+minutes;
+  const hourDigits=digits.slice(0,-2);
+  const hours=String(Number(hourDigits));
+
+  element.value=hours+":"+minuteDigits;
 }
 
 function setupHoursMinutesInputs(){
@@ -3124,6 +3128,12 @@ function parseHoursMinutes(id){
   if(!value) return 0;
 
   const parts=value.split(":");
+
+  if(parts.length === 1){
+    const hours=parseInt(parts[0],10);
+    return Number.isFinite(hours) && hours >= 0 ? hours : 0;
+  }
+
   if(parts.length !== 2) return 0;
 
   const hours=parseInt(parts[0],10);
