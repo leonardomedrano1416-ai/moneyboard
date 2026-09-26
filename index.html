@@ -751,6 +751,8 @@ select{
 
     <div class="note">Calibrated from your latest check: $2,381.70 gross, $257.00 federal, $147.67 Social Security, $34.53 Medicare, and $1,942.50 net. Federal withholding is estimated from that check, so future checks can vary.</div>
     <button class="primary" style="margin-top:16px" onclick="usePaycheckEstimate()">USE AS NEXT PAYCHECK</button>
+    <button class="secondary" id="depositPaycheckButton" onclick="depositPaycheck()" disabled>ADD PAYCHECK TO AVAILABLE MONEY</button>
+    <div class="note" id="depositPaycheckNote">This button unlocks on your selected payday. Tap it only after the paycheck has actually reached you.</div>
   </div>
 
   <div class="card">
@@ -950,7 +952,9 @@ const DEFAULT_MONEY = {
   paycheck:0,
   payday:"",
   savings:0,
-  debt:0
+  debt:0,
+  balancePeriodIndex:null,
+  lastPaycheckDepositDate:""
 };
 
 
@@ -1460,6 +1464,56 @@ function getCurrentPayPeriod(){
   return getPayPeriod(
     new Date()
   );
+}
+
+
+function initializeBalancePeriod(){
+  const current=getCurrentPayPeriod();
+
+  if(
+    money.balancePeriodIndex === null ||
+    money.balancePeriodIndex === undefined
+  ){
+    money.balancePeriodIndex=current.index;
+    saveMoney();
+  }
+}
+
+function rollBalanceForwardIfNeeded(){
+  const current=getCurrentPayPeriod();
+
+  if(
+    money.balancePeriodIndex === null ||
+    money.balancePeriodIndex === undefined
+  ){
+    money.balancePeriodIndex=current.index;
+    saveMoney();
+    return;
+  }
+
+  while(money.balancePeriodIndex < current.index){
+    const start=new Date(PAY_PERIOD_ANCHOR);
+    start.setDate(
+      start.getDate() +
+      money.balancePeriodIndex * PAY_PERIOD_DAYS
+    );
+
+    const previousPeriod=getPayPeriod(start);
+    const summary=getPeriodSummary(previousPeriod);
+
+    const previousCashOutflow=
+      Number(summary.normalTotal) +
+      Number(summary.debt) +
+      Number(summary.savings);
+
+    money.balance=
+      Number(money.balance) -
+      previousCashOutflow;
+
+    money.balancePeriodIndex += 1;
+  }
+
+  saveMoney();
 }
 
 
@@ -3202,6 +3256,100 @@ function usePaycheckEstimate(){
 });
 
 
+function paydayIsAvailable(){
+  if(!money.payday || Number(money.paycheck) <= 0){
+    return false;
+  }
+
+  const payday=parseLocalDate(money.payday);
+  if(!payday) return false;
+
+  return todayStart() >= payday;
+}
+
+function renderPaycheckDepositButton(){
+  const button=document.getElementById("depositPaycheckButton");
+  const note=document.getElementById("depositPaycheckNote");
+
+  if(!button || !note) return;
+
+  if(!money.payday){
+    button.disabled=true;
+    note.textContent="Set your next payday first. The button will unlock on that date.";
+    return;
+  }
+
+  if(Number(money.paycheck) <= 0){
+    button.disabled=true;
+    note.textContent="Use the calculator to set your expected next paycheck first.";
+    return;
+  }
+
+  if(!paydayIsAvailable()){
+    button.disabled=true;
+    note.textContent=
+      "Locked until "+formatLongDate(money.payday)+
+      ". Your expected paycheck will not be added early.";
+    return;
+  }
+
+  button.disabled=false;
+  note.textContent=
+    "Your payday has arrived. Tap only after the paycheck is actually available to you.";
+}
+
+function depositPaycheck(){
+  if(!paydayIsAvailable()){
+    alert("Your paycheck cannot be added before the selected payday.");
+    return;
+  }
+
+  const amount=Math.round(Number(money.paycheck)*100)/100;
+  const payday=money.payday;
+
+  if(
+    money.lastPaycheckDepositDate === payday
+  ){
+    alert("That paycheck has already been added.");
+    return;
+  }
+
+  if(
+    !confirm(
+      "Add "+moneyFormat(amount)+" to Money Available Now?"
+    )
+  ){
+    return;
+  }
+
+  // money.balance is the baseline for the current pay period.
+  // Adding the check here makes it immediately available while
+  // current-period spending continues to be subtracted normally.
+  money.balance=
+    Number(money.balance) + amount;
+
+  money.lastPaycheckDepositDate=payday;
+
+  // Advance the next payday by 14 days.
+  const nextPayday=parseLocalDate(payday);
+  nextPayday.setDate(nextPayday.getDate()+14);
+  money.payday=localDate(nextPayday);
+
+  // The deposited check is no longer an expected future check.
+  money.paycheck=0;
+
+  saveMoney();
+  render();
+  loadMoneyForm();
+
+  alert(
+    moneyFormat(amount)+
+    " was added to Money Available Now. Your next payday is "+
+    formatLongDate(money.payday)+"."
+  );
+}
+
+
 /* =========================================================
    SAFE TO SPEND
 ========================================================= */
@@ -3314,7 +3462,10 @@ function calculateSafeSpend(){
 
 function render(){
 
+  initializeBalancePeriod();
+  rollBalanceForwardIfNeeded();
   renderPaycheckCalculator();
+  renderPaycheckDepositButton();
 
   const calc =
     calculateSafeSpend();
