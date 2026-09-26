@@ -730,14 +730,14 @@ select{
 
   <div class="card">
     <div class="label">PAYCHECK CALCULATOR</div>
-    <div class="note" style="margin-bottom:14px">Estimate your next take-home pay using your real paycheck deductions.</div>
+    <div class="note" style="margin-bottom:14px">Estimate your next take-home pay using your real paycheck deductions. Enter all work time as Hours:Minutes — for example, 77:48 means 77 hours and 48 minutes.</div>
 
-    <div class="form-label">Regular Hours</div>
-    <input type="number" step="0.01" id="calcRegularHours" value="80">
-    <div class="form-label">Overtime Hours</div>
-    <input type="number" step="0.01" id="calcOvertimeHours" value="0">
-    <div class="form-label">Vacation / PTO Hours</div>
-    <input type="number" step="0.01" id="calcVacationHours" value="0">
+    <div class="form-label">Regular Hours (Hours:Minutes)</div>
+    <input type="text" inputmode="numeric" id="calcRegularHours" value="80:00" placeholder="77:48">
+    <div class="form-label">Overtime Hours (Hours:Minutes)</div>
+    <input type="text" inputmode="numeric" id="calcOvertimeHours" value="0:00" placeholder="5:04">
+    <div class="form-label">Vacation / PTO (Hours:Minutes)</div>
+    <input type="text" inputmode="numeric" id="calcVacationHours" value="0:00" placeholder="8:00">
     <div class="form-label">Hourly Rate</div>
     <input type="number" step="0.01" id="calcHourlyRate" value="25.50">
 
@@ -3045,18 +3045,48 @@ const PAYCHECK_CALIBRATION = {
   medicareRate:0.0145
 };
 
+function parseHoursMinutes(id){
+  const element=document.getElementById(id);
+  if(!element) return 0;
+
+  const value=element.value.trim();
+  if(!value) return 0;
+
+  const parts=value.split(":");
+  if(parts.length !== 2) return 0;
+
+  const hours=parseInt(parts[0],10);
+  const minutes=parseInt(parts[1],10);
+
+  if(
+    !Number.isFinite(hours) ||
+    !Number.isFinite(minutes) ||
+    hours < 0 ||
+    minutes < 0 ||
+    minutes > 59
+  ){
+    return 0;
+  }
+
+  return hours + (minutes / 60);
+}
+
 function paycheckNumber(id){
   const element=document.getElementById(id);
   return element ? Math.max(0,parseFloat(element.value)||0) : 0;
 }
 
 function calculatePaycheckEstimate(){
-  const regularHours=paycheckNumber("calcRegularHours");
-  const overtimeHours=paycheckNumber("calcOvertimeHours");
-  const vacationHours=paycheckNumber("calcVacationHours");
+  const regularHours=parseHoursMinutes("calcRegularHours");
+  const overtimeHours=parseHoursMinutes("calcOvertimeHours");
+  const vacationHours=parseHoursMinutes("calcVacationHours");
   const hourlyRate=paycheckNumber("calcHourlyRate");
 
-  const gross=(regularHours*hourlyRate)+(overtimeHours*hourlyRate*1.5)+(vacationHours*hourlyRate);
+  const regularPay=regularHours*hourlyRate;
+  const overtimePay=overtimeHours*hourlyRate*1.5;
+  const vacationPay=vacationHours*hourlyRate;
+  const gross=regularPay+overtimePay+vacationPay;
+
   const federal=gross*PAYCHECK_CALIBRATION.federalRate;
   const socialSecurity=gross*PAYCHECK_CALIBRATION.socialSecurityRate;
   const medicare=gross*PAYCHECK_CALIBRATION.medicareRate;
