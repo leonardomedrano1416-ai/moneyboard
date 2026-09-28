@@ -2080,119 +2080,34 @@ function renderCurrentTransactions(){
 
 
 function renderPeriodSummary(){
+  const period=getCurrentPayPeriod();
+  const summary=getPeriodSummary(period);
+  const dates=periodDateText(period);
+  const totalsHTML=categoryTotalsHTML(summary);
 
-  const period =
-    getCurrentPayPeriod();
+  const setText=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el) el.textContent=value;
+  };
 
+  const setHTML=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el) el.innerHTML=value;
+  };
 
-  const summary =
-    getPeriodSummary(period);
+  setText("homePeriodDates",dates);
+  setText("transactionPeriodDates",dates);
+  setText("homePeriodTotal",moneyFormat(summary.normalTotal));
+  setText("transactionPeriodTotal",moneyFormat(summary.normalTotal));
 
+  setHTML("homeCategoryTotals",totalsHTML);
+  setHTML("transactionCategoryTotals",totalsHTML);
 
-  const dates =
-    periodDateText(period);
-
-
-  document
-    .getElementById(
-      "homePeriodDates"
-    )
-    .textContent =
-      dates;
-
-
-  document
-    .getElementById(
-      "transactionPeriodDates"
-    )
-    .textContent =
-      dates;
-
-
-  document
-    .getElementById(
-      "homePeriodTotal"
-    )
-    .textContent =
-      moneyFormat(
-        summary.normalTotal
-      );
-
-
-  document
-    .getElementById(
-      "transactionPeriodTotal"
-    )
-    .textContent =
-      moneyFormat(
-        summary.normalTotal
-      );
-
-
-  const totalsHTML =
-    categoryTotalsHTML(summary);
-
-
-  document
-    .getElementById(
-      "homeCategoryTotals"
-    )
-    .innerHTML =
-      totalsHTML;
-
-
-  document
-    .getElementById(
-      "transactionCategoryTotals"
-    )
-    .innerHTML =
-      totalsHTML;
-
-
-  document
-    .getElementById(
-      "homeDebtTransactions"
-    )
-    .textContent =
-      moneyFormat(
-        summary.debt
-      );
-
-
-  document
-    .getElementById(
-      "periodDebtTransactions"
-    )
-    .textContent =
-      moneyFormat(
-        summary.debt
-      );
-
-
-  document
-    .getElementById(
-      "homeSavingsTransactions"
-    )
-    .textContent =
-      moneyFormat(
-        summary.savings
-      );
-
-
-  document
-    .getElementById(
-      "periodSavingsTransactions"
-    )
-    .textContent =
-      moneyFormat(
-        summary.savings
-      );
+  setText("homeDebtTransactions",moneyFormat(summary.debt));
+  setText("periodDebtTransactions",moneyFormat(summary.debt));
+  setText("homeSavingsTransactions",moneyFormat(summary.savings));
+  setText("periodSavingsTransactions",moneyFormat(summary.savings));
 }
-
-
-/* =========================================================
-   PAY PERIOD HISTORY
-========================================================= */
 
 function renderPeriodHistory(){
 
