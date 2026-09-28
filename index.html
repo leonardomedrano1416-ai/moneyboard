@@ -1813,85 +1813,31 @@ function deleteTransaction(id){
 ========================================================= */
 
 function getPeriodSummary(period){
+  const periodTransactions=transactionsForPeriod(period);
 
-  const periodTransactions =
-    transactionsForPeriod(period);
-
-
-  const normal =
-    periodTransactions.filter(
-      transaction =>
-        !isSpecialCategory(
-          transaction.category
-        )
-    );
-
-
-  const debt =
-    periodTransactions
-      .filter(
-        transaction =>
-          transaction.category ===
-          "Debt Payment"
-      )
-      .reduce(
-        (sum,transaction) =>
-          sum +
-          Number(transaction.amount),
-        0
-      );
-
-
-  const savings =
-    periodTransactions
-      .filter(
-        transaction =>
-          transaction.category ===
-          "Savings"
-      )
-      .reduce(
-        (sum,transaction) =>
-          sum +
-          Number(transaction.amount),
-        0
-      );
-
-
-  const categoryTotals = {};
-
-
-  normal.forEach(
-    transaction => {
-
-      if(
-        !categoryTotals[
-          transaction.category
-        ]
-      ){
-        categoryTotals[
-          transaction.category
-        ] = 0;
-      }
-
-
-      categoryTotals[
-        transaction.category
-      ] +=
-        Number(
-          transaction.amount
-        );
-    }
+  const normal=periodTransactions.filter(
+    transaction=>!isSpecialCategory(transaction.category)
   );
 
+  const debt=periodTransactions
+    .filter(transaction=>transaction.category==="Debt Payment")
+    .reduce((sum,transaction)=>sum+Number(transaction.amount),0);
 
-  const normalTotal =
-    normal.reduce(
-      (sum,transaction) =>
-        sum +
-        Number(transaction.amount),
-      0
-    );
+  const savings=periodTransactions
+    .filter(transaction=>transaction.category==="Savings")
+    .reduce((sum,transaction)=>sum+Number(transaction.amount),0);
 
+  const categoryTotals={};
+
+  normal.forEach(transaction=>{
+    const category=transaction.category || "Other";
+    categoryTotals[category]=(categoryTotals[category] || 0)+Number(transaction.amount);
+  });
+
+  const normalTotal=normal.reduce(
+    (sum,transaction)=>sum+Number(transaction.amount),
+    0
+  );
 
   return {
     transactions:periodTransactions,
@@ -1902,7 +1848,6 @@ function getPeriodSummary(period){
     categoryTotals
   };
 }
-
 
 /*
 Transactions included in Safe to Spend:
