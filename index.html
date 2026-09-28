@@ -496,111 +496,49 @@ select{
 </div>
 
 
+
 <!-- HOME -->
 
 <div id="home" class="page active">
 
   <div class="card">
-
-    <div class="label">MONEY AVAILABLE NOW</div>
+    <div class="label">MONEY AVAILABLE</div>
     <div class="big" id="currentBalance">$0.00</div>
 
     <div class="stats">
-
       <div class="stat">
-        <div class="stat-name">Next paycheck</div>
+        <div class="stat-name">Estimated next paycheck</div>
         <div class="stat-value" id="paycheckAmount">$0.00</div>
       </div>
-
       <div class="stat">
         <div class="stat-name">Payday</div>
         <div class="stat-value" id="paydayText">Not set</div>
       </div>
-
     </div>
 
     <div class="safe-box">
-
       <div class="safe-label">SAFE TO SPEND</div>
-
-      <div class="safe-number" id="safeSpend">
-        $0.00
-      </div>
-
+      <div class="safe-number" id="safeSpend">$0.00</div>
       <div class="note" id="safeExplanation">
-        Based on your available money and planned expenses.
+        Money available minus money you have set aside for savings.
       </div>
-
     </div>
-
   </div>
 
+  <div class="card">
+    <div class="label">SAVINGS SET ASIDE</div>
+    <div class="quick-total" id="savingsAmount">$0.00</div>
+    <div class="note">This stays in Money Available, but is protected from Safe to Spend.</div>
+  </div>
 
   <div class="card">
-
-    <div class="label">BEFORE NEXT PAYCHECK</div>
-
+    <div class="label">BILLS DUE BEFORE NEXT PAYCHECK</div>
     <div class="breakdown">
-      <span>Bills due</span>
+      <span>Total due</span>
       <span id="billsBeforePay">$0.00</span>
     </div>
-
-    <div class="breakdown">
-      <span>Everyday spending</span>
-      <span id="spendingBeforePay">$0.00</span>
-    </div>
-
-    <div class="breakdown">
-      <span>Debt set aside</span>
-      <span id="debtAmount">$0.00</span>
-    </div>
-
-    <div class="breakdown">
-      <span>Savings set aside</span>
-      <span id="savingsAmount">$0.00</span>
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <div class="period-header">
-
-      <div>
-        <div class="label">SPENDING THIS PAY PERIOD</div>
-        <div class="period-dates" id="homePeriodDates"></div>
-      </div>
-
-      <div style="text-align:right">
-        <div class="label">TOTAL</div>
-        <div class="quick-total" id="homePeriodTotal">$0.00</div>
-      </div>
-
-    </div>
-
-    <div id="homeCategoryTotals"></div>
-
-    <div class="special-box">
-
-      <div class="special-row">
-        <span>💳 Debt payments recorded</span>
-        <strong id="homeDebtTransactions">$0.00</strong>
-      </div>
-
-      <div class="special-row">
-        <span>💰 Savings recorded</span>
-        <strong id="homeSavingsTransactions">$0.00</strong>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-    <div class="label">COMING UP</div>
     <div id="upcomingBills"></div>
+    <div class="note" style="margin-top:12px">Upcoming bills are informational. They are not subtracted until you mark them Paid.</div>
   </div>
 
 </div>
@@ -701,27 +639,30 @@ select{
 </div>
 
 
+
 <!-- BILLS -->
 
 <div id="bills" class="page">
 
   <div class="card">
-
-    <button class="primary" onclick="openBillModal()">
-      + ADD BILL
-    </button>
-
+    <button class="primary" onclick="openBillModal()">+ ADD BILL</button>
   </div>
 
   <div class="card">
-
-    <div class="label">YOUR BILLS</div>
-
+    <div class="label">UPCOMING BILLS</div>
+    <div class="note" style="margin-bottom:12px">Bills are organized by due date. Nothing is deducted until you press Paid.</div>
     <div id="billList"></div>
+  </div>
 
+  <div class="card">
+    <button class="secondary" onclick="togglePaidHistory()">PAID BILLS HISTORY</button>
+    <div id="paidBillHistoryWrap" style="display:none;margin-top:14px">
+      <div id="paidBillHistory"></div>
+    </div>
   </div>
 
 </div>
+
 
 
 <!-- MONEY -->
@@ -729,8 +670,29 @@ select{
 <div id="money" class="page">
 
   <div class="card">
+    <div class="label">ADD PAYCHECK</div>
+    <div class="note" style="margin-bottom:14px">When your paycheck actually arrives, enter the real amount here. It is added immediately to Money Available and Safe to Spend.</div>
+    <div class="form-label">Paycheck Amount</div>
+    <input type="number" min="0" step="0.01" id="actualPaycheckAmount" placeholder="0.00">
+    <button class="primary" onclick="addActualPaycheck()">ADD PAYCHECK</button>
+  </div>
+
+  <div class="card">
+    <div class="label">SAVE MONEY</div>
+    <div class="note" style="margin-bottom:14px">Set aside any amount whenever you want. It stays in Money Available but is removed from Safe to Spend.</div>
+    <div class="form-label">Amount to Set Aside</div>
+    <input type="number" min="0" step="0.01" id="addSavingsAmount" placeholder="0.00">
+    <button class="primary" onclick="addToSavings()">SET ASIDE FOR SAVINGS</button>
+    <div class="breakdown" style="margin-top:14px">
+      <span>Currently set aside</span>
+      <strong id="moneySavingsTotal">$0.00</strong>
+    </div>
+    <button class="secondary" onclick="releaseSavings()">CHANGE / RELEASE SAVINGS</button>
+  </div>
+
+  <div class="card">
     <div class="label">PAYCHECK CALCULATOR</div>
-    <div class="note" style="margin-bottom:14px">Estimate your next take-home pay using your real paycheck deductions. Enter work time as Hours:Minutes. On your phone, just type the digits: 7748 becomes 77:48, 504 becomes 5:04, and 800 becomes 8:00.</div>
+    <div class="note" style="margin-bottom:14px">Estimate your next take-home pay. Enter work time as Hours:Minutes. On your phone, 7748 becomes 77:48, 504 becomes 5:04, and 800 becomes 8:00.</div>
 
     <div class="form-label">Regular Hours (Hours:Minutes)</div>
     <input type="text" inputmode="numeric" autocomplete="off" id="calcRegularHours" value="80:00" placeholder="77:48">
@@ -749,73 +711,27 @@ select{
       <div class="total-row"><span>Estimated take-home</span><span id="calcNet">$0.00</span></div>
     </div>
 
-    <div class="note">Calibrated from your latest check: $2,381.70 gross, $257.00 federal, $147.67 Social Security, $34.53 Medicare, and $1,942.50 net. Federal withholding is estimated from that check, so future checks can vary.</div>
-    <button class="primary" style="margin-top:16px" onclick="usePaycheckEstimate()">USE AS NEXT PAYCHECK</button>
-    <button class="secondary" id="depositPaycheckButton" onclick="depositPaycheck()" disabled>ADD PAYCHECK TO AVAILABLE MONEY</button>
-    <div class="note" id="depositPaycheckNote">This button unlocks on your selected payday. Tap it only after the paycheck has actually reached you.</div>
+    <div class="note">This is an estimate based on the paycheck calibration already in MoneyBoard.</div>
+    <button class="primary" style="margin-top:16px" onclick="usePaycheckEstimate()">USE AS ESTIMATED NEXT PAYCHECK</button>
   </div>
 
   <div class="card">
-
     <div class="label">MONEY SETTINGS</div>
+    <div class="note" style="margin-bottom:14px">Use Current Available Balance as a correction tool. Whatever number you save here becomes the exact Money Available amount—old transactions will not be subtracted again.</div>
 
-    <div class="form-label">
-      Current Available Balance
-    </div>
+    <div class="form-label">Current Available Balance</div>
+    <input type="number" step="0.01" id="moneyBalance">
 
-    <input
-      type="number"
-      step="0.01"
-      id="moneyBalance">
+    <div class="form-label">Estimated Next Paycheck</div>
+    <input type="number" step="0.01" id="moneyPaycheck">
 
-    <div class="form-label">
-      Expected Next Paycheck
-    </div>
+    <div class="form-label">Next Payday</div>
+    <input type="date" id="moneyPayday">
 
-    <input
-      type="number"
-      step="0.01"
-      id="moneyPaycheck">
+    <div class="form-label">Savings Currently Set Aside</div>
+    <input type="number" step="0.01" id="moneySavings">
 
-    <div class="form-label">
-      Next Payday
-    </div>
-
-    <input
-      type="date"
-      id="moneyPayday">
-
-    <div class="form-label">
-      Set Aside for Savings
-    </div>
-
-    <input
-      type="number"
-      step="0.01"
-      id="moneySavings">
-
-    <div class="form-label">
-      Set Aside for Debt
-    </div>
-
-    <input
-      type="number"
-      step="0.01"
-      id="moneyDebt">
-
-    <button
-      class="primary"
-      onclick="saveMoneySettings()">
-      SAVE
-    </button>
-
-    <div class="note">
-      Your available balance is the starting amount MoneyBoard uses.
-      Everyday transactions are subtracted from Safe to Spend automatically.
-      Savings and debt transactions are tracked separately because you already
-      have dedicated savings and debt set-asides above.
-    </div>
-
+    <button class="primary" onclick="saveMoneySettings()">SAVE SETTINGS</button>
   </div>
 
 </div>
@@ -952,7 +868,6 @@ const DEFAULT_MONEY = {
   paycheck:0,
   payday:"",
   savings:0,
-  debt:0,
   balancePeriodIndex:null,
   lastPaycheckDepositDate:""
 };
@@ -3600,6 +3515,368 @@ function render(){
   renderCategoryManager();
 
   populateCategorySelect();
+}
+
+
+
+/* =========================================================
+   MONEYBOARD REBUILD — SIMPLE RUNNING-BALANCE MODEL
+   Money Available is always the exact stored balance.
+   New transactions and paid bills reduce it once.
+   Savings only reduces Safe to Spend.
+========================================================= */
+
+function roundMoney(value){
+  return Math.round((Number(value) || 0) * 100) / 100;
+}
+
+function currentSavings(){
+  return Math.max(0, Number(money.savings) || 0);
+}
+
+function saveTransaction(){
+  const amount=parseFloat(document.getElementById("transactionAmount").value);
+  const category=document.getElementById("transactionCategory").value;
+  const description=document.getElementById("transactionDescription").value.trim();
+  const date=document.getElementById("transactionDate").value;
+
+  if(!Number.isFinite(amount) || amount <= 0 || !category || !date){
+    alert("Please enter an amount, category, and date.");
+    return;
+  }
+
+  if(editingTransactionId !== null){
+    const index=transactions.findIndex(t=>t.id===editingTransactionId);
+    if(index !== -1){
+      const oldAmount=Number(transactions[index].amount) || 0;
+      money.balance=roundMoney(Number(money.balance) + oldAmount - amount);
+      transactions[index]={...transactions[index],amount,category,description,date};
+    }
+  }else{
+    money.balance=roundMoney(Number(money.balance) - amount);
+    transactions.push({
+      id:Date.now(),
+      amount,
+      category,
+      description,
+      date,
+      createdAt:new Date().toISOString()
+    });
+  }
+
+  saveMoney();
+  saveTransactions();
+  closeTransactionModal();
+  render();
+  loadMoneyForm();
+}
+
+function deleteTransaction(id){
+  const transaction=transactions.find(t=>t.id===id);
+  if(!transaction) return;
+  if(!confirm("Delete this transaction and add its amount back to Money Available?")) return;
+
+  money.balance=roundMoney(Number(money.balance) + Number(transaction.amount));
+  transactions=transactions.filter(t=>t.id!==id);
+
+  saveMoney();
+  saveTransactions();
+  render();
+  loadMoneyForm();
+}
+
+function togglePaid(id){
+  const bill=bills.find(item=>item.id===id);
+  if(!bill || bill.paid) return;
+
+  if(!confirm("Mark "+bill.name+" paid and subtract "+moneyFormat(bill.amount)+" from Money Available?")) return;
+
+  bill.paid=true;
+  bill.paidDate=localDate(new Date());
+  bill.paidAt=new Date().toISOString();
+
+  money.balance=roundMoney(Number(money.balance) - Number(bill.amount));
+
+  if(bill.recurring){
+    const current=parseLocalDate(bill.dueDate);
+    const next=new Date(current.getFullYear(),current.getMonth()+1,current.getDate());
+    const alreadyExists=bills.some(b=>
+      !b.paid &&
+      b.name===bill.name &&
+      b.dueDate===localDate(next)
+    );
+    if(!alreadyExists){
+      bills.push({
+        id:Date.now()+1,
+        name:bill.name,
+        amount:Number(bill.amount),
+        dueDate:localDate(next),
+        recurring:true,
+        paid:false
+      });
+    }
+  }
+
+  saveMoney();
+  saveBills();
+  render();
+  loadMoneyForm();
+}
+
+function undoPaidBill(id){
+  const bill=bills.find(item=>item.id===id);
+  if(!bill || !bill.paid) return;
+  if(!confirm("Undo this paid bill and add "+moneyFormat(bill.amount)+" back to Money Available?")) return;
+
+  bill.paid=false;
+  delete bill.paidDate;
+  delete bill.paidAt;
+  money.balance=roundMoney(Number(money.balance) + Number(bill.amount));
+
+  saveMoney();
+  saveBills();
+  render();
+  loadMoneyForm();
+}
+
+function billHTML(bill,compact=false){
+  const status=getBillStatus(bill);
+  return `
+    <div class="item">
+      <div class="item-top">
+        <span>${escapeHTML(bill.name)}</span>
+        <span>${moneyFormat(bill.amount)}</span>
+      </div>
+      <div class="item-info">
+        Due ${formatDate(bill.dueDate)}${bill.recurring ? " · Recurring monthly" : " · One-time"}
+      </div>
+      <span class="badge ${status.className}">${status.text}</span>
+      ${compact ? "" : `
+        <div class="actions">
+          <button class="action pay-action" onclick="togglePaid(${bill.id})">Paid</button>
+          <button class="action edit-action" onclick="editBill(${bill.id})">Edit</button>
+          <button class="action delete-action" onclick="deleteBill(${bill.id})">Delete</button>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function renderBills(){
+  const list=document.getElementById("billList");
+  const unpaid=bills
+    .filter(b=>!b.paid)
+    .sort((a,b)=>parseLocalDate(a.dueDate)-parseLocalDate(b.dueDate));
+
+  list.innerHTML=unpaid.length
+    ? unpaid.map(b=>billHTML(b)).join("")
+    : `<div class="empty">No unpaid bills.</div>`;
+
+  renderPaidBillHistory();
+}
+
+function renderPaidBillHistory(){
+  const container=document.getElementById("paidBillHistory");
+  if(!container) return;
+
+  const paid=bills
+    .filter(b=>b.paid)
+    .sort((a,b)=>{
+      const aa=a.paidAt || a.paidDate || "";
+      const bb=b.paidAt || b.paidDate || "";
+      return bb.localeCompare(aa);
+    });
+
+  container.innerHTML=paid.length ? paid.map(b=>`
+    <div class="item">
+      <div class="item-top">
+        <span>${escapeHTML(b.name)}</span>
+        <span>${moneyFormat(b.amount)}</span>
+      </div>
+      <div class="item-info">
+        Due ${formatDate(b.dueDate)} · Paid ${formatDate(b.paidDate)}
+        ${b.recurring ? " · Recurring" : ""}
+      </div>
+      <span class="badge paid">Paid</span>
+      <div class="actions">
+        <button class="action edit-action" onclick="undoPaidBill(${b.id})">Undo Paid</button>
+      </div>
+    </div>
+  `).join("") : `<div class="empty">No paid bills yet.</div>`;
+}
+
+function togglePaidHistory(){
+  const wrap=document.getElementById("paidBillHistoryWrap");
+  if(!wrap) return;
+  wrap.style.display=wrap.style.display==="none" ? "block" : "none";
+}
+
+function renderUpcoming(){
+  const container=document.getElementById("upcomingBills");
+  const due=billsDueBeforePayday()
+    .sort((a,b)=>parseLocalDate(a.dueDate)-parseLocalDate(b.dueDate));
+
+  if(!due.length){
+    container.innerHTML=`<div class="empty">No bills due before your next paycheck.</div>`;
+    return;
+  }
+  container.innerHTML=due.map(b=>billHTML(b,true)).join("");
+}
+
+function addActualPaycheck(){
+  const input=document.getElementById("actualPaycheckAmount");
+  const amount=parseFloat(input.value);
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    alert("Enter the paycheck amount you actually received.");
+    return;
+  }
+
+  money.balance=roundMoney(Number(money.balance) + amount);
+  money.paycheck=0;
+  saveMoney();
+
+  input.value="";
+  render();
+  loadMoneyForm();
+  alert(moneyFormat(amount)+" was added to Money Available.");
+}
+
+function addToSavings(){
+  const input=document.getElementById("addSavingsAmount");
+  const amount=parseFloat(input.value);
+
+  if(!Number.isFinite(amount) || amount <= 0){
+    alert("Enter how much you want to set aside for savings.");
+    return;
+  }
+
+  money.savings=roundMoney(currentSavings()+amount);
+  saveMoney();
+
+  input.value="";
+  render();
+  loadMoneyForm();
+}
+
+function releaseSavings(){
+  const current=currentSavings();
+  const raw=prompt("How much money should remain set aside for savings?", current.toFixed(2));
+  if(raw===null) return;
+
+  const amount=parseFloat(raw);
+  if(!Number.isFinite(amount) || amount < 0){
+    alert("Enter a valid savings amount.");
+    return;
+  }
+
+  money.savings=roundMoney(amount);
+  saveMoney();
+  render();
+  loadMoneyForm();
+}
+
+function loadMoneyForm(){
+  document.getElementById("moneyBalance").value=roundMoney(money.balance);
+  document.getElementById("moneyPaycheck").value=roundMoney(money.paycheck);
+  document.getElementById("moneyPayday").value=money.payday || "";
+  document.getElementById("moneySavings").value=roundMoney(currentSavings());
+
+  const total=document.getElementById("moneySavingsTotal");
+  if(total) total.textContent=moneyFormat(currentSavings());
+}
+
+function saveMoneySettings(){
+  const balance=parseFloat(document.getElementById("moneyBalance").value);
+  const paycheck=parseFloat(document.getElementById("moneyPaycheck").value);
+  const savings=parseFloat(document.getElementById("moneySavings").value);
+  const payday=document.getElementById("moneyPayday").value;
+
+  if(!Number.isFinite(balance)){
+    alert("Enter your current available balance.");
+    return;
+  }
+
+  money.balance=roundMoney(balance);
+  money.paycheck=roundMoney(Number.isFinite(paycheck) ? Math.max(0,paycheck) : 0);
+  money.savings=roundMoney(Number.isFinite(savings) ? Math.max(0,savings) : 0);
+  money.payday=payday;
+
+  // Old derived-balance fields are intentionally no longer used.
+  delete money.balancePeriodIndex;
+  delete money.lastPaycheckDepositDate;
+  delete money.debt;
+
+  saveMoney();
+  render();
+  loadMoneyForm();
+  alert("Money settings saved. Money Available is now exactly "+moneyFormat(money.balance)+".");
+}
+
+function calculateSafeSpend(){
+  const dueBills=billsDueBeforePayday();
+  const billTotal=dueBills.reduce((sum,b)=>sum+Number(b.amount),0);
+  const actualBalance=roundMoney(money.balance);
+  const safe=roundMoney(actualBalance-currentSavings());
+
+  return {billTotal,actualBalance,safe};
+}
+
+function renderSpendingInsight(){
+  const period=getCurrentPayPeriod();
+  const summary=getPeriodSummary(period);
+  const holder=document.getElementById("transactionCategoryTotals");
+  if(!holder) return;
+
+  const entries=Object.entries(summary.categories || {})
+    .filter(([,amount])=>Number(amount)>0)
+    .sort((a,b)=>Number(b[1])-Number(a[1]));
+
+  if(!entries.length) return;
+
+  const [topName,topAmount]=entries[0];
+  const total=Number(summary.normalTotal)||0;
+  const pct=total>0 ? Math.round((Number(topAmount)/total)*100) : 0;
+
+  holder.insertAdjacentHTML("beforeend",`
+    <div class="special-box" style="margin-top:14px">
+      <div class="special-row">
+        <span>Highest spending category</span>
+        <strong>${escapeHTML(topName)} · ${moneyFormat(topAmount)} (${pct}%)</strong>
+      </div>
+    </div>
+  `);
+}
+
+function render(){
+  renderPaycheckCalculator();
+
+  const calc=calculateSafeSpend();
+
+  document.getElementById("currentBalance").textContent=moneyFormat(calc.actualBalance);
+  document.getElementById("paycheckAmount").textContent=moneyFormat(money.paycheck);
+  document.getElementById("paydayText").textContent=money.payday ? formatDate(money.payday) : "Not set";
+  document.getElementById("safeSpend").textContent=moneyFormat(calc.safe);
+  document.getElementById("safeSpend").classList.toggle("red",calc.safe<0);
+  document.getElementById("savingsAmount").textContent=moneyFormat(currentSavings());
+  document.getElementById("billsBeforePay").textContent=moneyFormat(calc.billTotal);
+
+  document.getElementById("safeExplanation").textContent=
+    calc.safe < 0
+      ? "You have set aside more for savings than is currently available."
+      : "Money Available minus Savings Set Aside. Bills only reduce this after you mark them Paid.";
+
+  const savingsTotal=document.getElementById("moneySavingsTotal");
+  if(savingsTotal) savingsTotal.textContent=moneyFormat(currentSavings());
+
+  renderBills();
+  renderUpcoming();
+  renderPeriodSummary();
+  renderCurrentTransactions();
+  renderPeriodHistory();
+  renderCategoryManager();
+  populateCategorySelect();
+  renderSpendingInsight();
 }
 
 
