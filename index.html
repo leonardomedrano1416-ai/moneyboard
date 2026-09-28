@@ -1483,14 +1483,17 @@ function transactionInPeriod(
 
 
 function transactionsForPeriod(period){
+  const startKey=localDate(period.start);
+  const endKey=localDate(period.end);
 
-  return transactions.filter(
-    transaction =>
-      transactionInPeriod(
-        transaction,
-        period
-      )
-  );
+  return transactions.filter(transaction=>{
+    if(Number.isInteger(transaction.periodIndex)){
+      return transaction.periodIndex===period.index;
+    }
+
+    const dateKey=String(transaction.date || "");
+    return dateKey >= startKey && dateKey <= endKey;
+  });
 }
 
 
@@ -3550,7 +3553,14 @@ function saveTransaction(){
     if(index !== -1){
       const oldAmount=Number(transactions[index].amount) || 0;
       money.balance=roundMoney(Number(money.balance) + oldAmount - amount);
-      transactions[index]={...transactions[index],amount,category,description,date};
+      transactions[index]={
+        ...transactions[index],
+        amount,
+        category,
+        description,
+        date,
+        periodIndex:getPayPeriod(date).index
+      };
     }
   }else{
     money.balance=roundMoney(Number(money.balance) - amount);
@@ -3560,6 +3570,7 @@ function saveTransaction(){
       category,
       description,
       date,
+      periodIndex:getPayPeriod(date).index,
       createdAt:new Date().toISOString()
     });
   }
