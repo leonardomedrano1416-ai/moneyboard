@@ -482,6 +482,19 @@ select{
 </head>
 
 <body>
+<div id="syncLogin" style="display:none;position:fixed;inset:0;background:#f7f7fb;z-index:9999;padding:24px;overflow:auto">
+  <div style="max-width:430px;margin:70px auto;background:white;border-radius:24px;padding:24px;box-shadow:0 10px 35px rgba(0,0,0,.10)">
+    <div style="font-size:28px;font-weight:800;margin-bottom:6px">MoneyBoard</div>
+    <div style="color:#666;margin-bottom:22px">Sign in to sync your money across your phone and laptop.</div>
+    <div class="form-label">Email</div>
+    <input type="email" id="syncEmail" autocomplete="email" placeholder="Email">
+    <div class="form-label">Password</div>
+    <input type="password" id="syncPassword" autocomplete="current-password" placeholder="Password">
+    <button class="primary" onclick="moneyboardSignIn()">SIGN IN</button>
+    <div id="syncLoginMessage" class="note" style="margin-top:14px"></div>
+  </div>
+</div>
+
 
 <div class="app">
 
@@ -856,6 +869,10 @@ select{
 </div>
 </div>
 
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script>
 
@@ -3749,6 +3766,103 @@ function render(){
   populateCategorySelect();
   renderSpendingInsight();
 }
+
+
+
+/* =========================================================
+   FIREBASE SYNC
+========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCtRPjqsDB1nCCrAIue9u5L0FPIM5WoftY",
+  authDomain: "moneyboard-2a0dc.firebaseapp.com",
+  projectId: "moneyboard-2a0dc",
+  storageBucket: "moneyboard-2a0dc.firebasestorage.app",
+  messagingSenderId: "504492647437",
+  appId: "1:504492647437:web:f44cc363d5991e72e9e144"
+};
+
+firebase.initializeApp(firebaseConfig);
+const mbAuth=firebase.auth();
+const mbDB=firebase.firestore();
+let mbUser=null, mbRemoteReady=false, mbApplyingRemote=false, mbUnsubscribe=null, mbSaveTimer=null;
+
+function mbState(){
+  return {money,bills,transactions,customCategories,updatedAt:firebase.firestore.FieldValue.serverTimestamp()};
+}
+function mbApplyState(data){
+  if(!data) return;
+  mbApplyingRemote=true;
+  if(data.money && typeof data.money==="object") money={...DEFAULT_MONEY,...data.money};
+  if(Array.isArray(data.bills)) bills=data.bills;
+  if(Array.isArray(data.transactions)) transactions=data.transactions;
+  if(Array.isArray(data.customCategories)) customCategories=data.customCategories;
+  localStorage.setItem(MONEY_KEY,JSON.stringify(money));
+  localStorage.setItem(BILLS_KEY,JSON.stringify(bills));
+  localStorage.setItem(TRANSACTIONS_KEY,JSON.stringify(transactions));
+  localStorage.setItem(CUSTOM_CATEGORIES_KEY,JSON.stringify(customCategories));
+  render(); loadMoneyForm();
+  mbApplyingRemote=false;
+}
+function mbQueueCloudSave(){
+  if(!mbUser || !mbRemoteReady || mbApplyingRemote) return;
+  clearTimeout(mbSaveTimer);
+  mbSaveTimer=setTimeout(async()=>{
+    try{
+      await mbDB.collection("users").doc(mbUser.uid).collection("moneyboard").doc("state").set(mbState(),{merge:true});
+    }catch(e){ console.error("MoneyBoard sync save failed:",e); }
+  },250);
+}
+function mbHasMeaningfulLocalData(){
+  return Math.abs(Number(money.balance)||0)>0.0001 ||
+    Math.abs(Number(money.paycheck)||0)>0.0001 ||
+    Math.abs(Number(money.savings)||0)>0.0001 ||
+    bills.length>0 || transactions.length>0 || customCategories.length>0;
+}
+async function mbStartSync(user){
+  mbUser=user;
+  const ref=mbDB.collection("users").doc(user.uid).collection("moneyboard").doc("state");
+  const snap=await ref.get();
+  if(snap.exists) mbApplyState(snap.data());
+  else if(mbHasMeaningfulLocalData()) await ref.set(mbState(),{merge:true});
+  else await ref.set({money,bills:[],transactions:[],customCategories:[],updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+  mbRemoteReady=true;
+  if(mbUnsubscribe) mbUnsubscribe();
+  mbUnsubscribe=ref.onSnapshot(s=>{ if(s.exists && mbRemoteReady) mbApplyState(s.data()); },
+    e=>console.error("MoneyBoard live sync failed:",e));
+}
+async function moneyboardSignIn(){
+  const email=document.getElementById("syncEmail").value.trim();
+  const password=document.getElementById("syncPassword").value;
+  const msg=document.getElementById("syncLoginMessage");
+  if(!email || !password){ msg.textContent="Enter your email and password."; return; }
+  msg.textContent="Signing in…";
+  try{ await mbAuth.signInWithEmailAndPassword(email,password); document.getElementById("syncPassword").value=""; }
+  catch(e){ console.error(e); msg.textContent="Sign-in failed. Check your email and password."; }
+}
+function moneyboardSignOut(){ mbAuth.signOut(); }
+mbAuth.onAuthStateChanged(async user=>{
+  const login=document.getElementById("syncLogin");
+  if(!user){
+    mbUser=null; mbRemoteReady=false;
+    if(mbUnsubscribe){ mbUnsubscribe(); mbUnsubscribe=null; }
+    login.style.display="block"; return;
+  }
+  login.style.display="none";
+  try{ await mbStartSync(user); }
+  catch(e){
+    console.error(e); login.style.display="block";
+    document.getElementById("syncLoginMessage").textContent="Signed in, but Firestore sync failed. Check the Firestore rules.";
+  }
+});
+
+const _localSaveMoney=saveMoney;
+saveMoney=function(){ _localSaveMoney(); mbQueueCloudSave(); };
+const _localSaveBills=saveBills;
+saveBills=function(){ _localSaveBills(); mbQueueCloudSave(); };
+const _localSaveTransactions=saveTransactions;
+saveTransactions=function(){ _localSaveTransactions(); mbQueueCloudSave(); };
+const _localSaveCustomCategories=saveCustomCategories;
+saveCustomCategories=function(){ _localSaveCustomCategories(); mbQueueCloudSave(); };
 
 
 /* =========================================================
