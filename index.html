@@ -3796,10 +3796,10 @@ function mbApplyState(data){
   if(Array.isArray(data.bills)) bills=data.bills;
   if(Array.isArray(data.transactions)) transactions=data.transactions;
   if(Array.isArray(data.customCategories)) customCategories=data.customCategories;
-  localStorage.setItem(MONEY_KEY,JSON.stringify(money));
-  localStorage.setItem(BILLS_KEY,JSON.stringify(bills));
-  localStorage.setItem(TRANSACTIONS_KEY,JSON.stringify(transactions));
-  localStorage.setItem(CUSTOM_CATEGORIES_KEY,JSON.stringify(customCategories));
+  localStorage.setItem("moneyboard_money",JSON.stringify(money));
+  localStorage.setItem("moneyboard_bills",JSON.stringify(bills));
+  localStorage.setItem("moneyboard_transactions",JSON.stringify(transactions));
+  localStorage.setItem("moneyboard_custom_categories",JSON.stringify(customCategories));
   render(); loadMoneyForm();
   mbApplyingRemote=false;
 }
