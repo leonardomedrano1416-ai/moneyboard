@@ -551,7 +551,7 @@ select{
       <span id="billsBeforePay">$0.00</span>
     </div>
     <div id="upcomingBills"></div>
-    <div class="note" style="margin-top:12px">Upcoming bills are informational. They are not subtracted until you mark them Paid.</div>
+    <div class="note" style="margin-top:12px">Unpaid bills due this pay period are reserved from Safe to Spend. They do not reduce Money Available until you mark them Paid.</div>
   </div>
 
 </div>
@@ -663,7 +663,7 @@ select{
 
   <div class="card">
     <div class="label">UPCOMING BILLS</div>
-    <div class="note" style="margin-bottom:12px">Bills are organized by due date. Nothing is deducted until you press Paid.</div>
+    <div class="note" style="margin-bottom:12px">Bills are organized by due date. Bills due this pay period reduce Safe to Spend immediately, but Money Available changes only when you press Paid.</div>
     <div id="billList"></div>
   </div>
 
@@ -3703,9 +3703,18 @@ function saveMoneySettings(){
 
 function calculateSafeSpend(){
   const dueBills=billsDueBeforePayday();
-  const billTotal=dueBills.reduce((sum,b)=>sum+Number(b.amount),0);
+  const billTotal=roundMoney(
+    dueBills.reduce((sum,b)=>sum+Number(b.amount),0)
+  );
   const actualBalance=roundMoney(money.balance);
-  const safe=roundMoney(actualBalance-currentSavings());
+
+  // Unpaid bills due in this pay period are reserved from Safe to Spend,
+  // but they do NOT reduce Money Available until the bill is marked Paid.
+  const safe=roundMoney(
+    actualBalance -
+    currentSavings() -
+    billTotal
+  );
 
   return {billTotal,actualBalance,safe};
 }
@@ -3751,8 +3760,8 @@ function render(){
 
   document.getElementById("safeExplanation").textContent=
     calc.safe < 0
-      ? "You have set aside more for savings than is currently available."
-      : "Money Available minus Savings Set Aside. Bills only reduce this after you mark them Paid.";
+      ? "Savings and unpaid bills due this pay period are more than your current Money Available."
+      : "Money Available minus Savings Set Aside and unpaid bills due this pay period. Money Available only changes when money actually leaves.";
 
   const savingsTotal=document.getElementById("moneySavingsTotal");
   if(savingsTotal) savingsTotal.textContent=moneyFormat(currentSavings());
